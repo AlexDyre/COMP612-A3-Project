@@ -5,6 +5,7 @@ import com.jogamp.opengl.GL2;
 
 import objects.Entity;
 import renderer.Main;
+import renderer.Settings;
 import shapes.Tri;
 import util.ColorRGB;
 import util.Vector3;
@@ -32,6 +33,7 @@ public class ObjObject extends Entity {
 		this.normals = new ArrayList<Vector3>();
 		this.faces = new ArrayList<Tri>();
 		this.transparentFaces = new ArrayList<Tri>();
+		System.out.println("generating obj");
 	}
 	
 	/**
@@ -45,7 +47,7 @@ public class ObjObject extends Entity {
 		
 		ObjLoader.importModel(path, this);
 		// TODO: Re-reference
-		//this.triDisplayList = Main.gl.glGenLists(1);
+		this.triDisplayList = gl.glGenLists(1);
 
 		compileTriList(gl);
 	}
@@ -56,7 +58,7 @@ public class ObjObject extends Entity {
 	 * @param index
 	 */
 	private void compileTriList(GL2 gl) {
-		
+		System.out.println("Compiling tri list");
 		gl.glNewList(triDisplayList, GL2.GL_COMPILE);
 		
 		// set a default bright red color as default

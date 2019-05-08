@@ -75,7 +75,7 @@ public class TrackballCamera implements MouseListener, MouseMotionListener, Mous
         // you might need to adapt this
         //glu.gluPerspective(fieldOfView, Main.windowWidth / Main.windowHeight, 0.1, distanceToOrigin * 3);
         // default
-        glu.gluPerspective(fieldOfView, (double) Settings.windowWidth / (double) windowHeight, 0.1, distanceToOrigin * 3);
+        glu.gluPerspective(fieldOfView, Settings.aspectRatio, 0.1, distanceToOrigin * 3);
 
         // then set up the camera position and orientation
         gl.glMatrixMode(GL2.GL_MODELVIEW);

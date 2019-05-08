@@ -1,5 +1,7 @@
 package util;
 
+import renderer.Settings;
+
 /**
  * Class defining a color object for RGB+A
  * @author Jordan Carter - 1317225
@@ -29,6 +31,13 @@ public class ColorRGBA {
 		this.green = green / 255;
 		this.blue = blue / 255;
 		this.alpha = alpha;
+	}
+
+	/**
+	 * Sets the GL renderer to use the colors defined color representation
+	 */
+	public void set() {
+		Settings.gl.glColor4d(red, green, blue, alpha);
 	}
 	
 	@Override

@@ -5,12 +5,12 @@ import com.jogamp.opengl.GL2;
 public class Settings {
 
 	// Debug flag
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
 
 	// Window size fields
 	public static int windowWidth = 1920 / 2;
 	public static int windowHeight = (1080 / 2);
-    public static double aspectRatio = (double)windowWidth / (double)windowHeight;
+    public static double aspectRatio;
 
 	// OpenGL Fields
     public static GL2 gl;
@@ -35,5 +35,9 @@ public class Settings {
 		Speed(double speed) {
 			this.speed = speed;
 		}
+	}
+
+	public void updateResolution() {
+		aspectRatio = (double)windowWidth / (double)windowHeight;
 	}
 }

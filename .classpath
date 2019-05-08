@@ -2,19 +2,19 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/Alex/Documents/Alex/COMP612-A3-Project/JOGLLibrary/gluegen-rt.jar">
+	<classpathentry kind="lib" path="JOGLLibrary/gluegen-rt-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="JOGLLibrary/gluegen-rt-natives-windows-i586.jar"/>
+	<classpathentry kind="lib" path="JOGLLibrary/gluegen-rt.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/Users/Alex/Documents/Alex/COMP612-A3-Project/JOGLLibrary/gluegen-javadoc/gluegen/javadoc/"/>
+			<attribute name="javadoc_location" value="file:/C:/GitHub/COMP612-A3-Project/JOGLLibrary/gluegen-javadoc/gluegen/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alex/Documents/Alex/COMP612-A3-Project/JOGLLibrary/gluegen-rt-natives-windows-amd64.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alex/Documents/Alex/COMP612-A3-Project/JOGLLibrary/gluegen-rt-natives-windows-i586.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alex/Documents/Alex/COMP612-A3-Project/JOGLLibrary/jogl-all.jar">
+	<classpathentry kind="lib" path="JOGLLibrary/jogl-all-mobile-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="JOGLLibrary/jogl-all-mobile-natives-windows-i586.jar"/>
+	<classpathentry kind="lib" path="JOGLLibrary/jogl-all.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="file:/C:/Users/Alex/Documents/Alex/COMP612-A3-Project/JOGLLibrary/jogl-javadoc/jogl/javadoc/"/>
+			<attribute name="javadoc_location" value="file:/C:/GitHub/COMP612-A3-Project/JOGLLibrary/jogl-javadoc/jogl/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Alex/Documents/Alex/COMP612-A3-Project/JOGLLibrary/jogl-all-mobile-natives-windows-amd64.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Alex/Documents/Alex/COMP612-A3-Project/JOGLLibrary/jogl-all-mobile-natives-windows-i586.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

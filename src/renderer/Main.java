@@ -14,12 +14,14 @@ import com.jogamp.opengl.util.FPSAnimator;
  */
 public class Main {
 	public static Renderer renderer;
+	public static Settings settings;
 
 	public static void main(String[] args) {
+		settings = new Settings();
 		Settings.deltaTime = 0.0;
 		Settings.speedModifier = 1.0;
-		Settings.windowHeight = 400;
-		Settings.windowWidth = 400;
+		//Settings.windowHeight = 400;
+		//Settings.windowWidth = 400;
 
 		if (Settings.DEBUG)
 			System.out.println("Initialising Project");

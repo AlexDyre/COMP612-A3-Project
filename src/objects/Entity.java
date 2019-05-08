@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.jogamp.opengl.GL2;
 
 import renderer.Main;
+import renderer.Settings;
 import util.Quaternion;
 import util.Vector3;
 
@@ -101,7 +102,7 @@ public abstract class Entity {
 	 */
 	public void draw(GL2 gl) {
 		gl.glPushMatrix();
-			update(gl); // update the object before drawing
+			//update(gl); // update the object before drawing
 			drawObject(gl);
 		
 			// if the entity has children entities, request for them draw
