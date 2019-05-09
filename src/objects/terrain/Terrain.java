@@ -28,16 +28,19 @@ public class Terrain extends Entity {
     private void generateTerrain() {
         GL2 gl = Settings.gl;
         gridSquareSize = 1;
-        
-        for (int i = 0; i < size; i++) {
-            Vector3 v1 = new Vector3((double) i, 0.0, 0.0);
-            Vector3 v3 = new Vector3((double) i + gridSquareSize, 0.0, 0.0);
-            Vector3 v4 = new Vector3((double) i + gridSquareSize, 0.0, gridSquareSize);
-            Vector3 v2 = new Vector3((double) i, 0.0, gridSquareSize);
 
-            terrain.add(new TerrainFace(v1, v2, v3, v4));
-            //System.out.println(i + " " + v1 + " " + v2);
+        // We will use 0.0 for the y-axis by default, to render a completely flat terrain across the x-z axis
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                Vector3 v1 = new Vector3((double) j, 0.0, (double) i); // BL
+                Vector3 v2 = new Vector3((double) j, 0.0, (double) i + gridSquareSize); // TL 
+                Vector3 v3 = new Vector3((double) j + gridSquareSize, 0.0, (double) i); // BR
+                Vector3 v4 = new Vector3((double) j + gridSquareSize, 0.0, (double) i + gridSquareSize); // TR
+                terrain.add(new TerrainFace(v1, v2, v3, v4));
+            }
         }
+        
+        System.out.println("Terrain faces size: " + terrain.size());
 
         generateDisplayList(gl);
     }
@@ -56,7 +59,7 @@ public class Terrain extends Entity {
         gl.glNewList(displayList, GL2.GL_COMPILE);
             terrainColor.set();
             for (TerrainFace face : terrain) {
-                //System.out.println("new face thing");
+                
                 gl.glBegin(GL2.GL_TRIANGLE_STRIP);
                     gl.glVertex3d(face.v1.x, face.v1.y, face.v1.z);
                     gl.glVertex3d(face.v2.x, face.v2.y, face.v2.z);

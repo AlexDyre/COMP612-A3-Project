@@ -73,7 +73,6 @@ public class TrackballCamera implements MouseListener, MouseMotionListener, Mous
         // setting up perspective projection
         // far distance is hardcoded to 3*cameraDistance. If your scene is bigger,
         // you might need to adapt this
-        //glu.gluPerspective(fieldOfView, Main.windowWidth / Main.windowHeight, 0.1, distanceToOrigin * 3);
         // default
         glu.gluPerspective(fieldOfView, Settings.aspectRatio, 0.1, distanceToOrigin * 3);
 

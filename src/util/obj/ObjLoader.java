@@ -25,13 +25,13 @@ public class ObjLoader {
 	 * @param path
 	 * @return
 	 */
-	public static ObjObject importModel(String path, ObjObject object) {
+	public static ObjObject importModel(String path, String fileName, ObjObject object) {
 		FileInputStream fs = null;
 		DataInputStream in = null;
 		BufferedReader br = null;
 		
 		try {
-			fs = new FileInputStream("resources/" + path);
+			fs = new FileInputStream(path + fileName);
 			in = new DataInputStream(fs);
 			br = new BufferedReader(new InputStreamReader(in));
 			String line;
@@ -55,7 +55,7 @@ public class ObjLoader {
 							object.normals.add(parseNormal(tokens));
 							break;
 						case "mtllib":
-							object.mtlLibrary = ObjMtlLoader.parseMtlLib(tokens[1]);
+							object.mtlLibrary = ObjMtlLoader.parseMtlLib(path, tokens[1]);
 							break;
 						case "usemtl":
 							useMtl = true;

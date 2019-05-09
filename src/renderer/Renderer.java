@@ -7,6 +7,8 @@ import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
 
+import objects.DimensionTool;
+import objects.SkyBox;
 import objects.terrain.Terrain;
 import util.ColorRGBA;
 import util.Vector3;
@@ -21,7 +23,9 @@ public class Renderer implements GLEventListener {
 
     // Test objects
     ObjObject testCube;
-    Terrain terrain;
+	Terrain terrain;
+	SkyBox skyBox;
+	DimensionTool dTool;
 
     public Renderer(GLCanvas canvas) {
         this.canvas = canvas;
@@ -54,19 +58,27 @@ public class Renderer implements GLEventListener {
 		
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
         gl.glLoadIdentity();
-        
+		
+		// Enable Depth Testing
+		//gl.glDepthMask(true);
+
         // Camera
         camera.draw(gl);
         // Lights
 		lights(gl);
 
         //System.out.println("Draw cube");
-        testCube.draw(gl);
+		//testCube.draw(gl);
+		skyBox.draw(gl);
 
         //terrain
         terrain.draw(gl);
 
-        // Flush before ending frame
+		// Clear the depth buffer to render the axis/dimension tool ontop of everything else
+		gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
+		dTool.draw(gl);
+
+		// Flush before ending frame\
         gl.glFlush();
     }
 
@@ -87,16 +99,17 @@ public class Renderer implements GLEventListener {
         // Enable depth testing
         gl.glEnable(GL2.GL_DEPTH_TEST);
         // intialise the camera
-        this.camera = new TrackballCamera(canvas);
+		this.camera = new TrackballCamera(canvas);
+		this.camera.setAngle(-90.0, 25.0);
 
         //use the lights
 		this.lights(gl);
 
-        testCube = new ObjObject("colorcube.obj", gl);
-        testCube.scale = new Vector3(0.1, 0.1, 0.1);
-        System.out.println(testCube);
-        //testCube.draw(gl);
-        terrain = new Terrain(20, 0.5, new ColorRGBA(0.0, 255.0, 0.0, 1.0));
+		dTool = new DimensionTool(gl);
+        //testCube = new ObjObject("resources\\", "colorcube.obj", gl);
+        //testCube.scale = new Vector3(0.1, 0.1, 0.1);
+		terrain = new Terrain(20, 0.5, new ColorRGBA(61.0, 118.0, 40.0, 1.0));
+		skyBox = new SkyBox("resources\\SkyBox\\", "SkyBox.obj", gl);
     }
 
     /**

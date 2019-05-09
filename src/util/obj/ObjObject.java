@@ -20,8 +20,8 @@ public class ObjObject extends Entity {
 	public ArrayList<Tri> transparentFaces;
 	public MtlLibrary mtlLibrary;
 	
-	private String filename;
-	private int triDisplayList;
+	protected String path, filename;
+	protected int triDisplayList;
 
 	/**
 	 * Default constructor, initialises an empty object
@@ -29,11 +29,11 @@ public class ObjObject extends Entity {
 	public ObjObject() {
 		super();
 		this.filename = "";
+		this.path = "";
 		this.vertices = new ArrayList<Vector3>();
 		this.normals = new ArrayList<Vector3>();
 		this.faces = new ArrayList<Tri>();
 		this.transparentFaces = new ArrayList<Tri>();
-		System.out.println("generating obj");
 	}
 	
 	/**
@@ -41,11 +41,11 @@ public class ObjObject extends Entity {
 	 * @param path path to .obj file for importing
 	 * @param importer obj importer
 	 */
-	public ObjObject(String path, GL2 gl) {
+	public ObjObject(String path, String fileName, GL2 gl) {
 		this();
-		this.filename = path;
-		
-		ObjLoader.importModel(path, this);
+		this.filename = fileName;
+		this.path = path;
+		ObjLoader.importModel(path, fileName, this);
 		// TODO: Re-reference
 		this.triDisplayList = gl.glGenLists(1);
 
@@ -57,7 +57,7 @@ public class ObjObject extends Entity {
 	 * @param gl
 	 * @param index
 	 */
-	private void compileTriList(GL2 gl) {
+	protected void compileTriList(GL2 gl) {
 		System.out.println("Compiling tri list");
 		gl.glNewList(triDisplayList, GL2.GL_COMPILE);
 		

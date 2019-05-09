@@ -25,6 +25,7 @@ public class ObjMtlLoader {
 		try {
 			br = new BufferedReader(new StringReader(material));
 			String line;
+			
 			while ((line = br.readLine()) != null) {
 				if (line.length() > 0) {
 					String[] tokens = line.split(" ");
@@ -52,6 +53,9 @@ public class ObjMtlLoader {
 						case "illum":
 							mat.illuminationModel = Integer.parseInt(tokens[1]);
 							break;
+						case "map_Kd":
+							mat.map_Kd = tokens[1];
+							break;
 						default:
 							break;
 						}
@@ -71,6 +75,11 @@ public class ObjMtlLoader {
 			}
 		}
 
+		//System.out.println(mat.mtlName + " " + mat.map_Kd);
+		if (mat.map_Kd != "") {
+			mat.textured = true;
+		}
+
 		return mat;
 	}
 
@@ -84,7 +93,7 @@ public class ObjMtlLoader {
 		return rgb;
 	}
 
-	public static MtlLibrary parseMtlLib(String path) {
+	public static MtlLibrary parseMtlLib(String path, String file) {
 		FileInputStream fs = null;
 		DataInputStream in = null;
 		BufferedReader br = null;
@@ -94,7 +103,7 @@ public class ObjMtlLoader {
 		MtlLibrary library = new MtlLibrary(path);
 
 		try {
-			fs = new FileInputStream("resources/" + path);
+			fs = new FileInputStream(path + file);
 			in = new DataInputStream(fs);
 			br = new BufferedReader(new InputStreamReader(in));
 			String line;
@@ -106,9 +115,17 @@ public class ObjMtlLoader {
 					if (tokens.length == 2) {
 						if (tokens[0].equalsIgnoreCase("newmtl")) {
 							String material = "";
-							for (int i = 0; i < 8; i++) {
-								material += br.readLine() + "\n";
+
+							line = br.readLine();
+
+							while (!(line.equalsIgnoreCase(""))) {
+								material += line + "\n";
+								line = br.readLine();
+								if (line == null) {
+									line = "";
+								}
 							}
+
 							library.materials.add(parseMaterial(tokens[1], material));
 						}
 					}

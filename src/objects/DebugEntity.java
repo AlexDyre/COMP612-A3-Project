@@ -10,20 +10,24 @@ import util.Quaternion;
 import util.Vector3;
 
 /**
- * Class representing an entity
- * Stores reference to important variables and contains method for maniuplation
+ * Debug Entity Class (Not fully implemented yet)
+ * Allows the use of objects as debugging tools
+ * Seperated from standard entities to allow for use of debug entities inside of normal entities without causing a stack overflow.
  * @author Jordan Carter - 1317225
  */
-public abstract class Entity {
+public abstract class DebugEntity {
 	public Vector3 pos, rotation, pivotRotation, scale, pivotPoint;
 	public Quaternion rot, pivotRot;
 	public Entity parent;
 	public ArrayList<Entity> children;
 	public boolean animated, pivot;
 
-	public boolean debug = false;
+	public boolean debug = true;
 	
-	public Entity() {
+	/**
+	 * Constructor for a debug entity
+	 */
+	public DebugEntity() {
 		this.pos = new Vector3(); // every object will have a position
 		this.pivotPoint = new Vector3();
 		this.rotation = new Vector3(); // Euler angle rotation representation, every object starts with no rotation
@@ -37,32 +41,21 @@ public abstract class Entity {
 		this.pivot = false;
 	}
 	
-	public void addChild(Entity child) {
-		// if the object has no children, create an array to store child(ren)
-		if (children == null) {
-			children = new ArrayList<Entity>();
-		}
-		
-		children.add(child);
-		child.parent = this;
-	}
-	
 	/**
 	 * Updates and animates and object
 	 * Updates an object to move/rotate/scale with the parent object
 	 */
 	public void update(GL2 gl) {
-		// Update rotation quaternions before applying any transforms
+		// Update rotation quaternion before applying any transforms
 		rot.rotateEuler(rotation);
 		if (pivot) {
 			pivotRot.rotateEuler(pivotRotation);
 		}
-
+		// Transform the object
 		transform(gl);
-		// If the object is flagged as animated, animate the object
+		// If the object is flagged as animated, animate the object first
 		if (animated) {
-			// TODO: this
-			//animate(gl, Main.deltaTime * Main.speedModifier);
+			animate(gl, Settings.deltaTime * Settings.speedModifier);
 		}
 	}
 	
@@ -71,6 +64,8 @@ public abstract class Entity {
 	 * @param gl
 	 */
 	public void transform(GL2 gl) {
+		// Translate the object to it's position from 0,0,0
+		//gl.glTranslated(pos.x, pos.y, pos.z);
 		// if a pivot point is set for the object, we need to rotate around that point
 		if (pivot) {
 			// to rotate around a pivot point, we need to move the object from 0,0,0 to the pivot point, apply rotation, then move back to 0,0,0 ready to apply normal translation
@@ -87,14 +82,14 @@ public abstract class Entity {
 	/**
 	 * Defines animations for the object
 	 */
-	public abstract void animate(GL2 gl, double deltaTime);
+	abstract void animate(GL2 gl, double deltaTime);
 	
 	/**
 	 * Defines how the object is drawn
 	 * Calls to draw display lists and create shapes are in here
 	 * @param gl gl renderer
 	 */
-	public abstract void drawObject(GL2 gl);
+	abstract void drawObject(GL2 gl);
 	
 	/**
 	 * Draws the object
