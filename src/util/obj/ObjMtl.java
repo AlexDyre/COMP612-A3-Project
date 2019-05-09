@@ -1,5 +1,7 @@
 package util.obj;
 
+import com.jogamp.opengl.util.texture.Texture;
+
 import util.ColorRGB;
 
 /**
@@ -18,6 +20,8 @@ public class ObjMtl {
 	public int illuminationModel;
 	public String map_Kd;
 	public boolean textured;
+	public Texture texture;
+	public int textureID;
 	
 
 	public ObjMtl(String mtlName) {

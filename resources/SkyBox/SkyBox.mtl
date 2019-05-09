@@ -1,5 +1,27 @@
 # Blender MTL File: 'SkyBox.blend'
-# Material Count: 4
+# Material Count: 6
+
+newmtl Back
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures\\bluecloud_bk.jpg
+
+newmtl Bottom
+Ns 225.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.0 0.0 0.0
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd textures\\bluecloud_dn.jpg
 
 newmtl Front
 Ns 225.000000
@@ -10,8 +32,9 @@ Ke 0.0 0.0 0.0
 Ni 1.450000
 d 1.000000
 illum 2
+map_Kd textures\\bluecloud_ft.jpg
 
-newmtl Material
+newmtl Left
 Ns 225.000000
 Ka 1.000000 1.000000 1.000000
 Kd 0.800000 0.800000 0.800000
@@ -20,6 +43,7 @@ Ke 0.0 0.0 0.0
 Ni 1.450000
 d 1.000000
 illum 2
+map_Kd textures\\bluecloud_lf.jpg
 
 newmtl Right
 Ns 225.000000
@@ -30,6 +54,7 @@ Ke 0.0 0.0 0.0
 Ni 1.450000
 d 1.000000
 illum 2
+map_Kd textures\\bluecloud_rt.jpg
 
 newmtl Top
 Ns 225.000000

@@ -97,7 +97,11 @@ public class Renderer implements GLEventListener {
         gl.glShadeModel(GL2.GL_SMOOTH);
         
         // Enable depth testing
-        gl.glEnable(GL2.GL_DEPTH_TEST);
+		gl.glEnable(GL2.GL_DEPTH_TEST);
+		
+		// Enable textures
+		gl.glEnable(GL2.GL_TEXTURE_2D);
+		
         // intialise the camera
 		this.camera = new TrackballCamera(canvas);
 		this.camera.setAngle(-90.0, 25.0);

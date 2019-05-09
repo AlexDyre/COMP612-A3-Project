@@ -8,6 +8,7 @@ import renderer.Main;
 import renderer.Settings;
 import shapes.Tri;
 import util.ColorRGB;
+import util.Vector2;
 import util.Vector3;
 
 /**
@@ -16,6 +17,7 @@ import util.Vector3;
  */
 public class ObjObject extends Entity {
 	public ArrayList<Vector3> vertices, normals;
+	public ArrayList<Vector2> textureVertices;
 	public ArrayList<Tri> faces;
 	public ArrayList<Tri> transparentFaces;
 	public MtlLibrary mtlLibrary;
@@ -32,6 +34,7 @@ public class ObjObject extends Entity {
 		this.path = "";
 		this.vertices = new ArrayList<Vector3>();
 		this.normals = new ArrayList<Vector3>();
+		this.textureVertices = new ArrayList<Vector2>();
 		this.faces = new ArrayList<Tri>();
 		this.transparentFaces = new ArrayList<Tri>();
 	}

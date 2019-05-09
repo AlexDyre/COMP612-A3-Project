@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import renderer.Main;
 import renderer.Settings;
 import shapes.Tri;
+import util.Vector2;
 import util.Vector3;
 
 /**
@@ -47,8 +48,10 @@ public class ObjLoader {
 						case "v":
 							object.vertices.add(parseVertex(tokens));
 							break;
+						case "vt":
+							object.textureVertices.add(parseVT(tokens));
+							break;
 						case "f":
-							//object.faces.add(parseFace(tokens, object, useMtl, material));
 							addFace(parseFace(tokens, object, useMtl, material), object);
 							break;
 						case "vn":
@@ -121,16 +124,20 @@ public class ObjLoader {
 				switch (i) {
 				case 1:
 					face.v1 = object.vertices.get(Integer.parseInt(faceTokens[0]) - 1);
+					face.vt1 = object.textureVertices.get(Integer.parseInt(faceTokens[1]) - 1);
 					break;
 				case 2:
 					face.v2 = object.vertices.get(Integer.parseInt(faceTokens[0]) - 1);
+					face.vt2 = object.textureVertices.get(Integer.parseInt(faceTokens[1]) - 1);
 					break;
 				case 3:
 					face.v3 = object.vertices.get(Integer.parseInt(faceTokens[0]) - 1);
+					face.vt3 = object.textureVertices.get(Integer.parseInt(faceTokens[1]) - 1);
 					break;
 				default:
 					break;
 				}
+
 				face.normal = object.normals.get(Integer.parseInt(faceTokens[2]) - 1);
 			}
 		}
@@ -154,6 +161,18 @@ public class ObjLoader {
 			vert.x = Double.parseDouble(tokens[1]);
 			vert.y = Double.parseDouble(tokens[2]);
 			vert.z = Double.parseDouble(tokens[3]);
+		}
+		
+		return vert;
+	}
+
+	private static Vector2 parseVT(String[] tokens) {
+		Vector2 vert = null;
+		
+		if (tokens.length == 3) {
+			vert = new Vector2();
+			vert.x = Double.parseDouble(tokens[1]);
+			vert.y = Double.parseDouble(tokens[2]);
 		}
 		
 		return vert;

@@ -54,6 +54,7 @@ public class ObjMtlLoader {
 							mat.illuminationModel = Integer.parseInt(tokens[1]);
 							break;
 						case "map_Kd":
+							parseTexture(mat, tokens[1]);
 							mat.map_Kd = tokens[1];
 							break;
 						default:
@@ -81,6 +82,11 @@ public class ObjMtlLoader {
 		}
 
 		return mat;
+	}
+
+	private static void parseTexture(ObjMtl mat, String textureName) {
+		System.out.println();
+		System.out.println(textureName);
 	}
 
 	private static ColorRGB parseMtlRGBComponent(String[] tokens) {
