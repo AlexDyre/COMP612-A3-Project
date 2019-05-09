@@ -18,6 +18,7 @@ public class TexturedObjObject extends ObjObject {
     //private Texture[] textures;
 
     private ArrayList<Texture> textures;
+    private ArrayList<String> loadedTextures;
     
     public TexturedObjObject(String path, String fileName, GL2 gl) {
         super();
@@ -33,18 +34,23 @@ public class TexturedObjObject extends ObjObject {
         this.triDisplayList = gl.glGenLists(1);
         // Call overrided compile
         compileTriList(gl);
+        
     }
 
     private void loadTextures(String path) {
         for (ObjMtl mat : mtlLibrary.materials) {
             if (mat.textured) {
                 try {
+                    //System.out.println("ASDSADASD");
                     textures.add(TextureIO.newTexture(new File(path + mat.map_Kd), true));
+                    //textures.get(0).toString();
                 } catch (IOException e) {
                     System.err.println(e);
                 }
             }
         }
+
+        System.out.println("Textures loaded");
     }
 
     @Override
