@@ -43,6 +43,9 @@ public class TexturedObjObject extends ObjObject {
                 try {
                     //System.out.println("ASDSADASD");
                     textures.add(TextureIO.newTexture(new File(path + mat.map_Kd), true));
+                    System.out.println("ASDASDASD");
+                    System.out.println(textures);
+                    System.out.println("ASDASDASD");
                     //textures.get(0).toString();
                 } catch (IOException e) {
                     System.err.println(e);

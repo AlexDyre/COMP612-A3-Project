@@ -17,7 +17,7 @@ import util.ColorRGB;
  */
 public class ObjMtlLoader {
 
-	public static ObjMtl parseMaterial(String name, String material) {
+	public static ObjMtl parseMaterial(String name, String material, MtlLibrary library) {
 		BufferedReader br = null;
 
 		ObjMtl mat = new ObjMtl(name);
@@ -54,7 +54,7 @@ public class ObjMtlLoader {
 							mat.illuminationModel = Integer.parseInt(tokens[1]);
 							break;
 						case "map_Kd":
-							parseTexture(mat, tokens[1]);
+							parseTexture(mat, tokens[1], library);
 							mat.map_Kd = tokens[1];
 							break;
 						default:
@@ -84,9 +84,14 @@ public class ObjMtlLoader {
 		return mat;
 	}
 
-	private static void parseTexture(ObjMtl mat, String textureName) {
-		System.out.println();
-		System.out.println(textureName);
+	private static void parseTexture(ObjMtl mat, String textureName, MtlLibrary library) {
+		Texture texture = new Texture();
+		texture.name = textureName;
+
+
+		int texId = 0;
+		//library.textures.add(new Texture(textureName, texId));
+		System.out.println("Added: " + textureName);
 	}
 
 	private static ColorRGB parseMtlRGBComponent(String[] tokens) {
@@ -132,7 +137,7 @@ public class ObjMtlLoader {
 								}
 							}
 
-							library.materials.add(parseMaterial(tokens[1], material));
+							library.materials.add(parseMaterial(tokens[1], material, library));
 						}
 					}
 				}
