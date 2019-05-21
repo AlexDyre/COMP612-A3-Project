@@ -66,7 +66,7 @@ public class Renderer implements GLEventListener {
         camera.draw(gl);
         // Lights
 		lights(gl);
-
+		
         //System.out.println("Draw cube");
 		//testCube.draw(gl);
 		skyBox.draw(gl);
@@ -101,7 +101,15 @@ public class Renderer implements GLEventListener {
 		
 		// Enable textures
 		gl.glEnable(GL2.GL_TEXTURE_2D);
-		
+		// gl.glEnable(GL2.GL_FOG);
+		// float fogColor[] = {1, 1, 1, 1};
+		// gl.glFogfv(GL2.GL_FOG_COLOR, fogColor, 0);
+		// gl.glFogf(GL2.GL_FOG_MODE, GL2.GL_LINEAR);
+		// gl.glFogf(GL2.GL_FOG_START, 1.0f);
+		// gl.glFogf(GL2.GL_FOG_END, 10.0f);
+		// gl.glFogf(GL2.GL_FOG_MODE, GL2.GL_EXP);
+		// gl.glFogf(GL2.GL_FOG_MODE, GL2.GL_EXP2);
+		// gl.glFogf(GL2.GL_FOG_DENSITY, 0.5f);
         // intialise the camera
 		this.camera = new TrackballCamera(canvas);
 		this.camera.setAngle(-90.0, 25.0);

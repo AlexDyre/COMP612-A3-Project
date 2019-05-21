@@ -61,6 +61,7 @@ public class Terrain extends Entity {
             for (TerrainFace face : terrain) {
                 
                 gl.glBegin(GL2.GL_TRIANGLE_STRIP);
+                    gl.glNormal3d(0, 1, 0);
                     gl.glVertex3d(face.v1.x, face.v1.y, face.v1.z);
                     gl.glVertex3d(face.v2.x, face.v2.y, face.v2.z);
                     gl.glVertex3d(face.v3.x, face.v3.y, face.v3.z);
