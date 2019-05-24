@@ -8,6 +8,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 import objects.DimensionTool;
+import objects.Player;
 import objects.SkyBox;
 import objects.terrain.Terrain;
 import util.ColorRGBA;
@@ -17,12 +18,14 @@ import util.obj.ObjObject;
 public class Renderer implements GLEventListener {
 
     private GLCanvas canvas;
-    private TrackballCamera camera;
+    private TrackingCamera camera;
     private GL2 gl;
 
+	// World Objects
+	Player player;
 
     // Test objects
-    ObjObject testCube;
+    ObjObject testCube, plane;
 	Terrain terrain;
 	SkyBox skyBox;
 	DimensionTool dTool;
@@ -38,6 +41,7 @@ public class Renderer implements GLEventListener {
 		double _tick = System.currentTimeMillis() / 1000.0;
 		Settings.deltaTime = _tick - Settings.prevTick;
 		Settings.prevTick = _tick;
+		//System.out.println(Settings.deltaTime + " " + Settings.speedModifier);
 	}
 
 	@Override
@@ -63,16 +67,22 @@ public class Renderer implements GLEventListener {
 		//gl.glDepthMask(true);
 
         // Camera
-        camera.draw(gl);
+		camera.draw(gl);
         // Lights
 		lights(gl);
+
+		// Draw the player, and all player objects
+		player.draw(gl);
 		
         //System.out.println("Draw cube");
-		//testCube.draw(gl);
-		skyBox.draw(gl);
+		testCube.draw(gl);
+		plane.draw(gl);
+		//skyBox.draw(gl);
+		//skyBox.scale = new Vector3(10,10,10);
 
         //terrain
-        terrain.draw(gl);
+		terrain.draw(gl);
+		//System.out.println("Terrain: " + terrain.pos);
 
 		// Clear the depth buffer to render the axis/dimension tool ontop of everything else
 		gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
@@ -82,6 +92,21 @@ public class Renderer implements GLEventListener {
         gl.glFlush();
     }
 
+	private void setupFog(GL2 gl) {
+		float fogColor[] = {1, 1, 1, 1};
+		gl.glEnable(GL2.GL_FOG);
+		gl.glHint(GL2.GL_FOG_HINT, GL2.GL_NICEST);
+		
+		gl.glFogfv(GL2.GL_FOG_COLOR, fogColor, 0);
+		//gl.glFogi(GL2.GL_FOG_MODE, GL2.GL_LINEAR);
+		//gl.glFogf(GL2.GL_FOG_START, 1.0f);
+		//gl.glFogf(GL2.GL_FOG_END, 10.0f);
+		//gl.glFogf(GL2.GL_FOG_MODE, GL2.GL_EXP);
+		gl.glFogi(GL2.GL_FOG_MODE, GL2.GL_LINEAR);
+		gl.glFogf(GL2.GL_FOG_DENSITY, 0.005f);
+		gl.glFogf(GL2.GL_FOG_START, 50.0f);
+		gl.glFogf(GL2.GL_FOG_END, 70.0f);
+	}
     
 
     @Override
@@ -101,28 +126,45 @@ public class Renderer implements GLEventListener {
 		
 		// Enable textures
 		gl.glEnable(GL2.GL_TEXTURE_2D);
-		// gl.glEnable(GL2.GL_FOG);
-		// float fogColor[] = {1, 1, 1, 1};
-		// gl.glFogfv(GL2.GL_FOG_COLOR, fogColor, 0);
-		// gl.glFogf(GL2.GL_FOG_MODE, GL2.GL_LINEAR);
-		// gl.glFogf(GL2.GL_FOG_START, 1.0f);
-		// gl.glFogf(GL2.GL_FOG_END, 10.0f);
-		// gl.glFogf(GL2.GL_FOG_MODE, GL2.GL_EXP);
-		// gl.glFogf(GL2.GL_FOG_MODE, GL2.GL_EXP2);
-		// gl.glFogf(GL2.GL_FOG_DENSITY, 0.5f);
+
+
+		
         // intialise the camera
-		this.camera = new TrackballCamera(canvas);
-		this.camera.setAngle(-90.0, 25.0);
+		this.camera = new TrackingCamera(canvas);
+		//this.camera.setAngle(-90.0, 25.0);
+		
+		//setupFog(gl);
 
         //use the lights
 		this.lights(gl);
 
 		dTool = new DimensionTool(gl);
-        //testCube = new ObjObject("resources\\", "colorcube.obj", gl);
-        //testCube.scale = new Vector3(0.1, 0.1, 0.1);
-		terrain = new Terrain(20, 0.5, new ColorRGBA(61.0, 118.0, 40.0, 1.0));
-		skyBox = new SkyBox("resources\\SkyBox\\", "SkyBox.obj", gl);
-    }
+        testCube = new ObjObject("resources\\", "colorcube.obj", gl);
+        testCube.scale = new Vector3(0.1, 0.1, 0.1);
+		terrain = new Terrain(200, 1.0, new ColorRGBA(61.0, 118.0, 40.0, 1.0));
+		terrain.pos = new Vector3(-100, 0, -100);
+		plane = new ObjObject("resources\\", "sc.obj", Settings.gl);
+		player = new Player(camera);
+		enableScene();
+	}
+	
+	private void enableScene() {
+
+		double _tick = System.currentTimeMillis() / 1000.0;
+		Settings.deltaTime = _tick - Settings.prevTick;
+		Settings.prevTick = _tick;
+
+		double waitTime = 5.0 + (System.currentTimeMillis() / 1000.0);
+
+		while (System.currentTimeMillis() < waitTime) {
+
+		}
+
+		terrain.enable();
+		testCube.enable();
+		player.enable();
+		plane.enable();
+	}
 
     /**
 	 * Initialises the lights for the scene
@@ -192,6 +234,8 @@ public class Renderer implements GLEventListener {
     }
 
     @Override
-    public void dispose(GLAutoDrawable drawable) {}
+	public void dispose(GLAutoDrawable drawable) {}
+	
+	//private void
 
 }

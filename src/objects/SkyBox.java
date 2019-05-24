@@ -1,8 +1,8 @@
 package objects;
 
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.util.texture.Texture;
 
+import util.Vector3;
 import util.obj.TexturedObjObject;
 
 public class SkyBox extends TexturedObjObject {
@@ -14,6 +14,7 @@ public class SkyBox extends TexturedObjObject {
      */
     public SkyBox(String path, String fileName, GL2 gl) {
         super(path, fileName, gl);
+        this.scale = new Vector3(100, 100, 100);
     }
 
     @Override
@@ -23,6 +24,9 @@ public class SkyBox extends TexturedObjObject {
 
     @Override
     public void drawObject(GL2 gl) {
-        gl.glCallList(triDisplayList);
+        // We need to make sure fog is disabled when drawing the skybox, then re-enable after
+        //gl.glDisable(GL2.GL_FOG);
+            gl.glCallList(triDisplayList);
+        //gl.glEnable(GL2.GL_FOG);
     }
 }

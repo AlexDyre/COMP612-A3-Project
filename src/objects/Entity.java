@@ -22,11 +22,13 @@ public abstract class Entity {
 	public boolean animated, pivot;
 
 	public boolean debug = false;
+
+	private boolean enabled = false;
 	
 	public Entity() {
-		this.pos = new Vector3(); // every object will have a position
-		this.pivotPoint = new Vector3();
-		this.rotation = new Vector3(); // Euler angle rotation representation, every object starts with no rotation
+		this.pos = new Vector3(0,0,0); // every object will have a position
+		this.pivotPoint = new Vector3(0,0,0);
+		this.rotation = new Vector3(0,0,0); // Euler angle rotation representation, every object starts with no rotation
 		this.pivotRotation = new Vector3();
 		this.scale = new Vector3(1.0, 1.0, 1.0); // every object starts with a scale of 1 for each axis
 		this.rot = new Quaternion(); // every object has a quaternion to represent rotation from the euler angle rotation vector
@@ -35,6 +37,7 @@ public abstract class Entity {
 		this.children = null; // not every object will have children
 		this.animated = false;
 		this.pivot = false;
+		this.rot.rotateEuler(this.rotation);
 	}
 	
 	public void addChild(Entity child) {
@@ -54,16 +57,20 @@ public abstract class Entity {
 	public void update(GL2 gl) {
 		// Update rotation quaternions before applying any transforms
 		rot.rotateEuler(rotation);
+
 		if (pivot) {
 			pivotRot.rotateEuler(pivotRotation);
 		}
 
 		transform(gl);
+		
 		// If the object is flagged as animated, animate the object
 		if (animated) {
 			// TODO: this
-			//animate(gl, Main.deltaTime * Main.speedModifier);
+			animate(gl, Settings.deltaTime * Settings.speedModifier);
 		}
+
+		
 	}
 	
 	/**
@@ -101,16 +108,28 @@ public abstract class Entity {
 	 * @param gl
 	 */
 	public void draw(GL2 gl) {
-		gl.glPushMatrix();
-			update(gl); // update the object before drawing
-			drawObject(gl);
-		
-			// if the entity has children entities, request for them draw
-			if (children != null) {
-				for (Entity obj : children) {
-					obj.draw(gl);
+		if (enabled) {
+			gl.glPushMatrix();
+				update(gl); // update the object before drawing
+				drawObject(gl);
+			
+				// if the entity has children entities, request for them draw
+				if (children != null) {
+					for (Entity obj : children) {
+						obj.draw(gl);
+					}
 				}
+			gl.glPopMatrix();
+		}
+	}
+
+	public void enable() {
+		enabled = true;
+
+		if (children != null) {
+			for (Entity obj : children) {
+				obj.enable();
 			}
-		gl.glPopMatrix();
+		}
 	}
 }

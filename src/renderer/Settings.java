@@ -5,7 +5,11 @@ import com.jogamp.opengl.GL2;
 public class Settings {
 
 	// Debug flag
-    public static boolean DEBUG = true;
+	public static boolean DEBUG = true;
+	
+	// View Settings
+	// 1.0 GL units = 1.0m
+	public static double viewDistance = 200.0; // View distance is set slightly further than the furthest point of the sky box
 
 	// Window size fields
 	public static int windowWidth = 1920 / 2;
@@ -18,7 +22,7 @@ public class Settings {
 	// Animator Fields
 	public static int FPS = 60;
     public static double deltaTime, prevTick;
-	public static double speedModifier;
+	public static double speedModifier = 1.0;
 
     /**
      * Animation Speed Enum

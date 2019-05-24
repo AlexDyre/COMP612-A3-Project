@@ -14,6 +14,7 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.Vector;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.awt.GLCanvas;
@@ -21,11 +22,12 @@ import com.jogamp.opengl.glu.GLU;
 
 import objects.Entity;
 import objects.Player;
+import util.Vector3;
 
 
-public class TrackballCamera implements MouseListener, MouseMotionListener, MouseWheelListener {
+public class TrackingCamera extends Entity implements MouseListener, MouseMotionListener, MouseWheelListener {
 
-    private Player player;
+    public Player player;
 
     // some hard limitations to camera values
     private static final double MIN_DISTANCE = 1;
@@ -33,11 +35,11 @@ public class TrackballCamera implements MouseListener, MouseMotionListener, Mous
     private static final double MAX_FOV = 80;
     
     // the point to look at
-    private double lookAt[] = {0, 0, 0};
+    private Vector3 target = new Vector3(0,0,0);
+    private Vector3 forward = new Vector3(0, 1, 0);
+    private Vector3 side = new Vector3(1, 0, 0);
 
-    // the camera rotation angles
-    private double angleX = 0;
-    private double angleY = 0;
+    public Vector3 cameraOffset = new Vector3();
 
     // old mouse position for dragging
     private Point oldMousePos;
@@ -56,10 +58,28 @@ public class TrackballCamera implements MouseListener, MouseMotionListener, Mous
      * Constructor of the trackball camera
      * @param drawable the GL drawable context to register this camera with
      */
-    public TrackballCamera(GLCanvas canvas) {
+    public TrackingCamera(GLCanvas canvas) {
     	canvas.addMouseListener(this);
     	canvas.addMouseWheelListener(this);
-    	canvas.addMouseMotionListener(this);
+        canvas.addMouseMotionListener(this);
+    }
+
+    public void update() {
+
+
+        //pos = player.pos;
+
+        pos = new Vector3(player.pos.x + cameraOffset.x, player.pos.y + cameraOffset.y, player.pos.z + cameraOffset.z);
+        
+        //pos.x = player.pos.x + cameraOffset.x + Math.sin(Math.toRadians(player.rotation.x));
+        //pos.y = player.pos.y + cameraOffset.y + Math.sin(Math.toRadians(player.rotation.y));
+        //pos.z = player.pos.z + cameraOffset.z + Math.cos(Math.toRadians(player.rotation.x));
+
+        double r = distanceToOrigin * Math.cos(Math.toRadians(rotation.y));
+		
+		target.x = pos.x + (r * Math.sin(Math.toRadians(rotation.x)));
+		target.y = pos.y + (r * Math.sin(Math.toRadians(rotation.y)));
+		target.z = pos.z + (r * Math.cos(Math.toRadians(rotation.x)));
     }
 
     /**
@@ -85,18 +105,16 @@ public class TrackballCamera implements MouseListener, MouseMotionListener, Mous
         // then set up the camera position and orientation
         gl.glMatrixMode(GL2.GL_MODELVIEW);
         gl.glLoadIdentity();
-        double r = distanceToOrigin * Math.cos(Math.toRadians(angleY));
-        double camZ = r * Math.cos(Math.toRadians(angleX));
-        double camX = r * Math.sin(Math.toRadians(angleX));
-        double camY = distanceToOrigin * Math.sin(Math.toRadians(angleY));
+
+        update(); // Update transforms and targets
+
+        //System.out.println("POS: " + pos);
+        //System.out.println("TARGET: " + target);
+
         glu.gluLookAt(
-            camX, camY, camZ,                // eye
-            lookAt[0], lookAt[1], lookAt[2], // center
-            0, 1, 0);                        // up
-        
-        if (Settings.DEBUG) {
-        	
-        }
+            pos.x, pos.y, pos.z,                // eye
+            target.x, target.y, target.z,       // center
+            forward.x, forward.y, forward.z);   // up
     }
 
     /**
@@ -161,20 +179,20 @@ public class TrackballCamera implements MouseListener, MouseMotionListener, Mous
      * @param z Z coordinate of the lookAt point
      */
     public void setLookAt(double x, double y, double z) {
-        lookAt = new double[]{x, y, z};
+        //lookAt = new double[]{x, y, z};
     }
 
     /**
      * Resets the camera rotations.
      */
     public void reset() {
-        angleX = angleY = 0;
+        rotation.x = rotation.y = 0;
         oldMousePos = null;
     }
 
     public void setAngle(double x, double y) {
-        angleX = x;
-        angleY = y;
+        rotation.x = x;
+        rotation.y = y;
         oldMousePos = null;
     }
 
@@ -222,10 +240,12 @@ public class TrackballCamera implements MouseListener, MouseMotionListener, Mous
         if (oldMousePos != null) {
             // dragging with left mouse button: rotate
             if (mouseButton == MouseEvent.BUTTON1) {
-                angleX -= p.x - oldMousePos.x;
-                angleY += p.y - oldMousePos.y;
+
+                rotation.x -= p.x - oldMousePos.x;
+                rotation.y += p.y - oldMousePos.y;
+
                 // limit Y rotation angle to avoid gimbal lock
-                angleY = Math.min(89.9, Math.max(-89.9, angleY));
+                rotation.y = Math.min(89.9, Math.max(-89.9, rotation.y));
             } // dragging with right mouse button: change distance
             else if (mouseButton == MouseEvent.BUTTON3) {
                 distanceToOrigin += 0.1 * (p.y - oldMousePos.y);
@@ -254,4 +274,16 @@ public class TrackballCamera implements MouseListener, MouseMotionListener, Mous
         }
         limitFieldOfView();
     }
+
+    @Override
+    public void animate(GL2 gl, double deltaTime) {
+
+    }
+
+    @Override
+    public void drawObject(GL2 gl) {
+        
+    }
+
+  
 }
