@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.jogamp.opengl.GL2;
 
-import renderer.Main;
 import renderer.Settings;
 import util.Quaternion;
 import util.Vector3;

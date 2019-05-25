@@ -1,5 +1,7 @@
 package renderer;
 
+import java.util.ArrayList;
+
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
@@ -8,6 +10,7 @@ import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 import objects.DimensionTool;
+import objects.Entity;
 import objects.Player;
 import objects.SkyBox;
 import objects.terrain.Terrain;
@@ -19,7 +22,10 @@ public class Renderer implements GLEventListener {
 
     private GLCanvas canvas;
     private TrackingCamera camera;
-    private GL2 gl;
+	private GL2 gl;
+	
+	// Keep a register of all the objects in the scene
+	private ArrayList<Entity> sceneEntityList;
 
 	// World Objects
 	Player player;
@@ -31,7 +37,8 @@ public class Renderer implements GLEventListener {
 	DimensionTool dTool;
 
     public Renderer(GLCanvas canvas) {
-        this.canvas = canvas;
+		this.canvas = canvas;
+		this.sceneEntityList = new ArrayList<Entity>();
     }
 
     /**
@@ -46,11 +53,11 @@ public class Renderer implements GLEventListener {
 
 	@Override
     public void display(GLAutoDrawable drawable) {
-        // Update time
-        update();
-
+        // Update time parameters
+		update();
+		
+		// select and clear the model-view matrix
         GL2 gl = drawable.getGL().getGL2();
-        // select and clear the model-view matrix
 		gl.glClear(GL2.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		
 		gl.glEnable(GL2.GL_BLEND);
@@ -62,27 +69,19 @@ public class Renderer implements GLEventListener {
 		
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
         gl.glLoadIdentity();
-		
-		// Enable Depth Testing
-		//gl.glDepthMask(true);
-
-        // Camera
-		camera.draw(gl);
+        
         // Lights
 		lights(gl);
+		// Camera
+		camera.draw(gl);
 
 		// Draw the player, and all player objects
 		player.draw(gl);
-		
-        //System.out.println("Draw cube");
 		testCube.draw(gl);
-		plane.draw(gl);
-		//skyBox.draw(gl);
-		//skyBox.scale = new Vector3(10,10,10);
+		//plane.draw(gl);
 
         //terrain
 		terrain.draw(gl);
-		//System.out.println("Terrain: " + terrain.pos);
 
 		// Clear the depth buffer to render the axis/dimension tool ontop of everything else
 		gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
@@ -127,43 +126,37 @@ public class Renderer implements GLEventListener {
 		// Enable textures
 		gl.glEnable(GL2.GL_TEXTURE_2D);
 
-
-		
         // intialise the camera
 		this.camera = new TrackingCamera(canvas);
-		//this.camera.setAngle(-90.0, 25.0);
 		
+		// TODO: Fog should be re-enabled
 		//setupFog(gl);
 
         //use the lights
 		this.lights(gl);
 
-		dTool = new DimensionTool(gl);
-        testCube = new ObjObject("resources\\", "colorcube.obj", gl);
-        testCube.scale = new Vector3(0.1, 0.1, 0.1);
-		terrain = new Terrain(200, 1.0, new ColorRGBA(61.0, 118.0, 40.0, 1.0));
+		
+		sceneEntityList.add(dTool = new DimensionTool(gl));
+		sceneEntityList.add(testCube = new ObjObject("resources\\", "colorcube.obj", gl));
+		testCube.scale = new Vector3(0.1, 0.1, 0.1);
+		sceneEntityList.add(terrain = new Terrain(200, 1.0, new ColorRGBA(61.0, 118.0, 40.0, 1.0)));
 		terrain.pos = new Vector3(-100, 0, -100);
-		plane = new ObjObject("resources\\", "sc.obj", Settings.gl);
-		player = new Player(camera);
+		sceneEntityList.add(plane = new ObjObject("resources\\", "sc.obj", Settings.gl));
+		sceneEntityList.add(player = new Player(camera));
+
 		enableScene();
 	}
 	
 	private void enableScene() {
-
-		double _tick = System.currentTimeMillis() / 1000.0;
-		Settings.deltaTime = _tick - Settings.prevTick;
-		Settings.prevTick = _tick;
-
+		
 		double waitTime = 5.0 + (System.currentTimeMillis() / 1000.0);
 
-		while (System.currentTimeMillis() < waitTime) {
+		// Wait for a brief period so the entities can initialise before enabling
+		while (System.currentTimeMillis() < waitTime) {}
 
+		for (Entity e : sceneEntityList) {
+			e.enable();
 		}
-
-		terrain.enable();
-		testCube.enable();
-		player.enable();
-		plane.enable();
 	}
 
     /**
@@ -235,7 +228,4 @@ public class Renderer implements GLEventListener {
 
     @Override
 	public void dispose(GLAutoDrawable drawable) {}
-	
-	//private void
-
 }

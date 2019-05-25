@@ -25,9 +25,14 @@ import objects.Player;
 import util.Vector3;
 
 
-public class TrackingCamera extends Entity implements MouseListener, MouseMotionListener, MouseWheelListener {
+public class TrackingCamera implements MouseListener, MouseMotionListener, MouseWheelListener {
 
     public Player player;
+
+    public double cameraDistance = 12.0;
+    public double angleAroundPlane = 0.0;
+    public double pitchAroundPlane = 18.0;
+    public Vector3 pos;
 
     // some hard limitations to camera values
     private static final double MIN_DISTANCE = 1;
@@ -59,27 +64,44 @@ public class TrackingCamera extends Entity implements MouseListener, MouseMotion
      * @param drawable the GL drawable context to register this camera with
      */
     public TrackingCamera(GLCanvas canvas) {
+        this.pos = new Vector3();
     	canvas.addMouseListener(this);
     	canvas.addMouseWheelListener(this);
         canvas.addMouseMotionListener(this);
     }
 
+
+    public double calculateHorizontal() {
+        return cameraDistance * Math.cos(Math.toRadians(pitchAroundPlane));
+    }
+
+    public double calculateVertical() {
+        return cameraDistance * Math.sin(Math.toRadians(pitchAroundPlane));
+    }
+
+    public void calculateCameraPos(double horizontal, double vertical) {
+        double theta = player.rotation.y + angleAroundPlane;
+
+        double xPos = horizontal * Math.sin(Math.toRadians(theta));
+        double zPos = horizontal * Math.cos(Math.toRadians(theta));
+
+        pos.x = player.pos.x - xPos;
+        pos.z = player.pos.z - zPos;
+        pos.y = player.pos.y + vertical;
+
+        //System.out.println("py: " + player.pos.y + " v: " + vertical + " py+v: " + pos.y);
+
+        System.out.println("Vertical: " + pitchAroundPlane);
+
+    }
+
     public void update() {
+        double verticalDistance = calculateVertical();
+        double horizontalDistance = calculateHorizontal();
 
+        calculateCameraPos(horizontalDistance, verticalDistance);
 
-        //pos = player.pos;
-
-        pos = new Vector3(player.pos.x + cameraOffset.x, player.pos.y + cameraOffset.y, player.pos.z + cameraOffset.z);
-        
-        //pos.x = player.pos.x + cameraOffset.x + Math.sin(Math.toRadians(player.rotation.x));
-        //pos.y = player.pos.y + cameraOffset.y + Math.sin(Math.toRadians(player.rotation.y));
-        //pos.z = player.pos.z + cameraOffset.z + Math.cos(Math.toRadians(player.rotation.x));
-
-        double r = distanceToOrigin * Math.cos(Math.toRadians(rotation.y));
-		
-		target.x = pos.x + (r * Math.sin(Math.toRadians(rotation.x)));
-		target.y = pos.y + (r * Math.sin(Math.toRadians(rotation.y)));
-		target.z = pos.z + (r * Math.cos(Math.toRadians(rotation.x)));
+        target = player.pos;
     }
 
     /**
@@ -182,9 +204,11 @@ public class TrackingCamera extends Entity implements MouseListener, MouseMotion
         //lookAt = new double[]{x, y, z};
     }
 
+    // TODO: Re-implement?
     /**
      * Resets the camera rotations.
      */
+    /*
     public void reset() {
         rotation.x = rotation.y = 0;
         oldMousePos = null;
@@ -195,6 +219,7 @@ public class TrackingCamera extends Entity implements MouseListener, MouseMotion
         rotation.y = y;
         oldMousePos = null;
     }
+    */
 
     /**
      * Passes a new window size to the camera.
@@ -241,11 +266,13 @@ public class TrackingCamera extends Entity implements MouseListener, MouseMotion
             // dragging with left mouse button: rotate
             if (mouseButton == MouseEvent.BUTTON1) {
 
-                rotation.x -= p.x - oldMousePos.x;
-                rotation.y += p.y - oldMousePos.y;
+                //rotation.x -= p.x - oldMousePos.x;
+                angleAroundPlane -= (p.x - oldMousePos.x) * 0.1;
+                pitchAroundPlane += (p.y - oldMousePos.y) * 0.1;
 
                 // limit Y rotation angle to avoid gimbal lock
-                rotation.y = Math.min(89.9, Math.max(-89.9, rotation.y));
+                // TODO: look at rotation lock again
+                //rotation.y = Math.min(89.9, Math.max(-89.9, rotation.y));
             } // dragging with right mouse button: change distance
             else if (mouseButton == MouseEvent.BUTTON3) {
                 distanceToOrigin += 0.1 * (p.y - oldMousePos.y);
@@ -265,25 +292,13 @@ public class TrackingCamera extends Entity implements MouseListener, MouseMotion
         int clicks = e.getWheelRotation();
         // zoom using the FoV
         while (clicks > 0) {
-            fieldOfView *= 1.1;
+            cameraDistance *= 1.1;
             clicks--;
         }
         while (clicks < 0) {
-            fieldOfView /= 1.1;
+            cameraDistance /= 1.1;
             clicks++;
         }
         limitFieldOfView();
     }
-
-    @Override
-    public void animate(GL2 gl, double deltaTime) {
-
-    }
-
-    @Override
-    public void drawObject(GL2 gl) {
-        
-    }
-
-  
 }

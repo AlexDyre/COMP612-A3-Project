@@ -1,10 +1,8 @@
 package objects;
 
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.awt.GLCanvas;
 
 import renderer.Settings;
-import renderer.TrackballCamera;
 import renderer.TrackingCamera;
 import util.Vector3;
 import util.obj.ObjObject;
@@ -16,14 +14,18 @@ public class Player extends Entity {
 
     public SkyBox skyBox;
     public ObjObject plane;
+    public ObjObject planeProp;
     public TrackingCamera cam;
 
-    private Vector3 cameraOffset = new Vector3(0, 3, -12);
-    private Vector3 cameraOffsetFirstPerson = new Vector3(0, 2, 2 );
+    private Vector3 cameraOffset = new Vector3(0, 6, 12);
+    //private Vector3 cameraOffsetFirstPerson = new Vector3(0, 2, 2 );
 
-    private Vector3 forward = new Vector3(0, 1, 0);
-    private Vector3 zero = new Vector3(0,0,0);
-    private boolean initialised = false;
+    //private Vector3 forward = new Vector3(0, 1, 0);
+    //private Vector3 zero = new Vector3(0,0,0);
+    private double lastSecond;
+    private double startPos;
+
+    private double planeSpeed = 1;
 
     public Player(TrackingCamera cam) {
         super();
@@ -35,41 +37,43 @@ public class Player extends Entity {
         pos = new Vector3(10,10,5);
         this.addChild(this.skyBox = new SkyBox("resources\\SkyBox\\", "SkyBox.obj", Settings.gl));
         this.addChild(this.plane = new ObjObject("resources\\", "sc.obj", Settings.gl));
+        this.addChild(this.planeProp = new ObjObject("resources\\", "sc_prop.obj", Settings.gl));
+        planeProp.addChild(new DimensionTool(Settings.gl));
+        // plane prop height on plane = 1.49468m
+        this.planeProp.pos.y = 1.49468;
+        
+
+        // Attach an axis tool for debugging
+        //this.addChild(new DimensionTool(Settings.gl));
 
         //cam.pos.x -= 10;
 
         animated = true;
+        this.planeSpeed /= 3.6; // Convert the speed of the plane from km/h to m/s
         this.cam.cameraOffset = cameraOffset;
-        this.cam.update();
-        initialised = true;
+        this.cam.pos = new Vector3(0,10,10);
+        lastSecond = System.currentTimeMillis() / 1000;
+        startPos = pos.z;
+        //this.cam.update();
     }
 
     @Override
     public void animate(GL2 gl, double deltaTime) {
 
-        if (initialised) {
-            
+        if (System.currentTimeMillis() / 1000 >= lastSecond + 1) {
+            System.out.println("Plane moved: " + (pos.z - startPos));
+            startPos = pos.z;
+            lastSecond = System.currentTimeMillis() / 1000;
         }
-
-        rotation.y += 10 * deltaTime;
-
-        //pos.x += 10 *deltaTime;
-        //System.out.println("Player: " + pos);
-        //System.out.println(cam.rotation);
-        //System.out.println("Amount: " + rotationAmount);
 
         //rotation.y += 1 * deltaTime;
 
-        System.out.println(rotation.y);
-        System.out.println("r: " + rotation + "\ndelta time: " + deltaTime + "\nspeed: " + Settings.speedModifier);
-
-        // make sure the skybox is not rotating on any axis
-        //skyBox.rotation = zero;
+        //rotation.y = 0;
+        //pos.z += planeSpeed;
+        planeProp.rotation.z  += 10;
     }
 
     @Override
     public void drawObject(GL2 gl) {
-        // Update the camera
-        //cam.setLookAt(pos.x, pos.y, pos.z);
     }
 }

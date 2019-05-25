@@ -2,8 +2,6 @@ package objects;
 
 import com.jogamp.opengl.GL2;
 
-import util.Vector3;
-
 /**
  * Dimension Tool Debug Entity Class
  * @author Jordan Carter - 1317225
