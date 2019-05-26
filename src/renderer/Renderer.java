@@ -11,6 +11,7 @@ import com.jogamp.opengl.util.gl2.GLUT;
 
 import objects.DimensionTool;
 import objects.Entity;
+import objects.IndexedObject;
 import objects.Player;
 import objects.SkyBox;
 import objects.terrain.Terrain;
@@ -38,6 +39,7 @@ public class Renderer implements GLEventListener {
 	Terrain terrain;
 	SkyBox skyBox;
 	DimensionTool dTool;
+	IndexedObject tree;
 
     public Renderer(GLCanvas canvas) {
 		this.canvas = canvas;
@@ -98,6 +100,7 @@ public class Renderer implements GLEventListener {
 		player.draw(gl);
 		testCube.draw(gl);
 		//plane.draw(gl);
+		tree.draw(gl);
 
         //terrain
 		terrain.draw(gl);
@@ -162,6 +165,8 @@ public class Renderer implements GLEventListener {
 		terrain.pos = new Vector3(-100, 0, -100);
 		sceneEntityList.add(plane = new ObjObject("resources\\", "sc.obj", Settings.gl));
 		sceneEntityList.add(player = new Player(camera));
+		
+		sceneEntityList.add(tree = new IndexedObject(new ObjObject("resources\\", "sc.obj", Settings.gl).triDisplayList));
 
 		enableScene();
 	}

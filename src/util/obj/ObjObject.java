@@ -22,8 +22,8 @@ public class ObjObject extends Entity {
 	public ArrayList<Tri> transparentFaces;
 	public MtlLibrary mtlLibrary;
 	
-	protected String path, filename;
-	protected int triDisplayList;
+	public String path, filename;
+	public int triDisplayList;
 
 	/**
 	 * Default constructor, initialises an empty object
@@ -64,8 +64,8 @@ public class ObjObject extends Entity {
 		System.out.println("Compiling tri list");
 		gl.glNewList(triDisplayList, GL2.GL_COMPILE);
 		
-		// set a default bright red color as default
-		gl.glColor4d(1.0, 0.0, 0.0, 1.0);
+		// set a default white color as default
+		gl.glColor4d(1.0, 1.0, 1.0, 1.0);
 			
 		ColorRGB color;
 		for (Tri face : faces) {
