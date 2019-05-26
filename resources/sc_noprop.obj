@@ -1,6 +1,6 @@
 # Blender v2.80 (sub 39) OBJ File: 'sc_noprop.blend'
 # www.blender.org
-mtllib sc.mtl
+mtllib sc_noprop.mtl
 o Body_Circle
 v -0.204268 1.892478 -0.000000
 v -0.204267 1.775935 0.281359

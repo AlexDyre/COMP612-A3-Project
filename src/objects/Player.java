@@ -20,7 +20,7 @@ public class Player extends Entity {
     private Vector3 cameraOffset = new Vector3(0, 6, 12);
     //private Vector3 cameraOffsetFirstPerson = new Vector3(0, 2, 2 );
 
-    //private Vector3 forward = new Vector3(0, 1, 0);
+    private Vector3 forward = new Vector3(0, 0, 1);
     //private Vector3 zero = new Vector3(0,0,0);
     private double lastSecond;
     private double startPos;
@@ -34,7 +34,7 @@ public class Player extends Entity {
         this.cam.player = this;
         
         // Create and assign the skybox as a child object to the player
-        pos = new Vector3(10,10,5);
+        pos = new Vector3(10,5,5);
         this.addChild(this.skyBox = new SkyBox("resources\\SkyBox\\", "SkyBox.obj", Settings.gl));
         this.addChild(this.plane = new ObjObject("resources\\", "sc.obj", Settings.gl));
         this.addChild(this.planeProp = new ObjObject("resources\\", "sc_prop.obj", Settings.gl));
@@ -44,7 +44,7 @@ public class Player extends Entity {
         
 
         // Attach an axis tool for debugging
-        //this.addChild(new DimensionTool(Settings.gl));
+        this.addChild(new DimensionTool(Settings.gl));
 
         //cam.pos.x -= 10;
 
@@ -67,13 +67,36 @@ public class Player extends Entity {
         }
 
         //rotation.y += 1 * deltaTime;
+        //plane.rotation.y = 90;
+        //planeProp.rotation.y = 90;
+
+        //pos = new Vector3(0,5,0);
 
         //rotation.y = 0;
+        //rotation.z = 0;
         //pos.z += planeSpeed;
-        planeProp.rotation.z  += 10;
+        planeProp.rotation.x  += 10;
+
+        //System.out.println(rotation.y);
+
+        move(0.0, 0.05);
     }
 
     @Override
     public void drawObject(GL2 gl) {
     }
+
+    private void move(double rotOffset, double distance) {
+
+        double verticalDistance = distance * Math.sin(Math.toRadians(rotation.z));
+        double horizontalDistance = distance * Math.cos(Math.toRadians(rotation.z));
+
+        double theta = rotation.y + 90;
+        pos.x += horizontalDistance * Math.sin(Math.toRadians(theta));
+        pos.z += horizontalDistance * Math.cos(Math.toRadians(theta));
+
+
+        //pos.x += distance * Math.cos(Math.toRadians(rotation.y));
+        //pos.z += distance * Math.sin(Math.toRadians(rotation.y));
+	}
 }

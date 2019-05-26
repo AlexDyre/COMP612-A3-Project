@@ -20,7 +20,10 @@ import util.obj.ObjObject;
 
 public class Renderer implements GLEventListener {
 
-    private GLCanvas canvas;
+	public boolean wireframe;
+
+	private GLCanvas canvas;
+	private InputController ic;
     private TrackingCamera camera;
 	private GL2 gl;
 	
@@ -39,6 +42,7 @@ public class Renderer implements GLEventListener {
     public Renderer(GLCanvas canvas) {
 		this.canvas = canvas;
 		this.sceneEntityList = new ArrayList<Entity>();
+		this.wireframe = false;
     }
 
     /**
@@ -49,6 +53,15 @@ public class Renderer implements GLEventListener {
 		Settings.deltaTime = _tick - Settings.prevTick;
 		Settings.prevTick = _tick;
 		//System.out.println(Settings.deltaTime + " " + Settings.speedModifier);
+	}
+
+	/**
+	 * Toggles wireframe mode
+	 */
+	public void toggleWireframe() {
+		if (Settings.DEBUG)
+			System.out.println("Wireframe toggled");
+		wireframe = (wireframe) ? false : true;
 	}
 
 	@Override
@@ -68,7 +81,13 @@ public class Renderer implements GLEventListener {
 		gl.glCullFace(GL2.GL_BACK);
 		
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
-        gl.glLoadIdentity();
+		gl.glLoadIdentity();
+		
+		if (wireframe) {
+			gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_LINE);
+		} else {
+			gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
+		}
         
         // Lights
 		lights(gl);
@@ -112,7 +131,7 @@ public class Renderer implements GLEventListener {
     public void init(GLAutoDrawable drawable) {
         GL2 gl = drawable.getGL().getGL2();
         Settings.gl = gl;
-
+		ic = new InputController(canvas, this);
         // Enable V-Sync
         gl.setSwapInterval(1);
         
@@ -138,7 +157,7 @@ public class Renderer implements GLEventListener {
 		
 		sceneEntityList.add(dTool = new DimensionTool(gl));
 		sceneEntityList.add(testCube = new ObjObject("resources\\", "colorcube.obj", gl));
-		testCube.scale = new Vector3(0.1, 0.1, 0.1);
+		testCube.pos.y = 0.5;
 		sceneEntityList.add(terrain = new Terrain(200, 1.0, new ColorRGBA(61.0, 118.0, 40.0, 1.0)));
 		terrain.pos = new Vector3(-100, 0, -100);
 		sceneEntityList.add(plane = new ObjObject("resources\\", "sc.obj", Settings.gl));

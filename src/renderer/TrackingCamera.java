@@ -88,11 +88,6 @@ public class TrackingCamera implements MouseListener, MouseMotionListener, Mouse
         pos.x = player.pos.x - xPos;
         pos.z = player.pos.z - zPos;
         pos.y = player.pos.y + vertical;
-
-        //System.out.println("py: " + player.pos.y + " v: " + vertical + " py+v: " + pos.y);
-
-        System.out.println("Vertical: " + pitchAroundPlane);
-
     }
 
     public void update() {
