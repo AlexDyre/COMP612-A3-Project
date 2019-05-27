@@ -96,12 +96,15 @@ public class Renderer implements GLEventListener {
 		} else {
 			gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
 		}
-        skyBox.draw(gl);
+
+        
         // Lights
 		lights(gl);
 		// Camera
 		camera.draw(gl);
-
+		gl.glDisable(GL2.GL_DEPTH_TEST);
+		skyBox.draw(gl);
+		gl.glEnable(GL2.GL_DEPTH_TEST);
 		// Draw the player, and all player objects
 		
 		testCube.draw(gl);
@@ -163,7 +166,7 @@ public class Renderer implements GLEventListener {
 		this.camera = new TrackingCamera(canvas);
 		
 		// TODO: Fog should be re-enabled
-		//setupFog(gl);
+		setupFog(gl);
 
         //use the lights
 		this.lights(gl);

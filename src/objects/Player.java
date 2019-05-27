@@ -12,7 +12,7 @@ import util.obj.ObjObject;
  */
 public class Player extends Entity {
 
-    public SkyBox skyBox;
+    //public SkyBox skyBox;
     public ObjObject plane;
     public ObjObject planeProp;
     public TrackingCamera cam;
