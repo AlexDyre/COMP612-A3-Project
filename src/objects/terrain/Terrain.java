@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 import com.jogamp.opengl.GL2;
 import objects.Entity;
+import objects.IndexedObject;
 import renderer.Settings;
 import util.ColorRGBA;
 import util.Vector3;
+import util.obj.ObjObject;
 
 public class Terrain extends Entity {
     public int size;
@@ -14,6 +16,7 @@ public class Terrain extends Entity {
     private ArrayList<TerrainFace> terrain;
     private ColorRGBA terrainColor;
     private int displayList;
+    private int numTrees = 100;
 
     public Terrain(int size, double gridSquareSize, ColorRGBA terrainColor) {
         super();
@@ -21,7 +24,7 @@ public class Terrain extends Entity {
         this.gridSquareSize = gridSquareSize;
         this.terrain = new ArrayList<TerrainFace>();
         this.terrainColor = terrainColor;
-        System.out.println(terrainColor);
+        this.pos = new Vector3(-100, 0, -100);
         generateTerrain();
     }
 
@@ -39,8 +42,19 @@ public class Terrain extends Entity {
                 terrain.add(new TerrainFace(v1, v2, v3, v4));
             }
         }
-        
-        System.out.println("Terrain faces size: " + terrain.size());
+        ObjObject treeModel = new ObjObject("resources\\", "tree.obj", Settings.gl);
+        double terrainSize = gridSquareSize * (double) size;
+        System.err.println("Terrain size: " + terrainSize);
+
+        for (int i = 0; i < numTrees; i++) {
+            IndexedObject tree = new IndexedObject(treeModel.triDisplayList);
+            double x = (Math.random() * terrainSize) - (terrainSize/2) - pos.x;
+            double y = 0 - pos.y;
+            double z = (Math.random() * terrainSize) - (terrainSize/2) - pos.z;
+            tree.pos = new Vector3(x, y, z);
+            System.out.println("Generated Tree Pos: " + tree.pos);
+            this.addChild(tree);
+        }
 
         generateDisplayList(gl);
     }

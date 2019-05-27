@@ -34,6 +34,9 @@ public class TrackingCamera implements MouseListener, MouseMotionListener, Mouse
     public double pitchAroundPlane = 18.0;
     public Vector3 pos;
 
+    public boolean firstPerson = false;
+    public Vector3 firstPersonOffset;
+
     // some hard limitations to camera values
     private static final double MIN_DISTANCE = 1;
     private static final double MIN_FOV = 1;
@@ -68,6 +71,7 @@ public class TrackingCamera implements MouseListener, MouseMotionListener, Mouse
     	canvas.addMouseListener(this);
     	canvas.addMouseWheelListener(this);
         canvas.addMouseMotionListener(this);
+        this.firstPersonOffset = new Vector3();
     }
 
 
@@ -91,12 +95,21 @@ public class TrackingCamera implements MouseListener, MouseMotionListener, Mouse
     }
 
     public void update() {
+
+
         double verticalDistance = calculateVertical();
         double horizontalDistance = calculateHorizontal();
 
         calculateCameraPos(horizontalDistance, verticalDistance);
 
-        target = player.pos;
+        if (!firstPerson) {
+            target = player.pos;
+        } else {
+            pos = new Vector3(player.pos.x + firstPersonOffset.x, player.pos.y + firstPersonOffset.y, player.pos.z + firstPersonOffset.z);
+       
+            //target
+        }
+        
     }
 
     /**
@@ -124,9 +137,6 @@ public class TrackingCamera implements MouseListener, MouseMotionListener, Mouse
         gl.glLoadIdentity();
 
         update(); // Update transforms and targets
-
-        //System.out.println("POS: " + pos);
-        //System.out.println("TARGET: " + target);
 
         glu.gluLookAt(
             pos.x, pos.y, pos.z,                // eye

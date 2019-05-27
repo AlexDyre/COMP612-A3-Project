@@ -45,16 +45,22 @@ public class Renderer implements GLEventListener {
 		this.canvas = canvas;
 		this.sceneEntityList = new ArrayList<Entity>();
 		this.wireframe = false;
+		Settings.prevTick = -1;
     }
 
     /**
      * Updates time
      */
     public void update() {
+		
+		if (Settings.prevTick == -1) {
+			Settings.prevTick = System.currentTimeMillis() / 1000.0;
+		}
+
 		double _tick = System.currentTimeMillis() / 1000.0;
 		Settings.deltaTime = _tick - Settings.prevTick;
 		Settings.prevTick = _tick;
-		//System.out.println(Settings.deltaTime + " " + Settings.speedModifier);
+		//System.out.println("Delta Time: " + Settings.deltaTime);
 	}
 
 	/**
@@ -90,20 +96,25 @@ public class Renderer implements GLEventListener {
 		} else {
 			gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
 		}
-        
+        skyBox.draw(gl);
         // Lights
 		lights(gl);
 		// Camera
 		camera.draw(gl);
 
 		// Draw the player, and all player objects
-		player.draw(gl);
+		
 		testCube.draw(gl);
 		//plane.draw(gl);
 		tree.draw(gl);
 
         //terrain
 		terrain.draw(gl);
+
+
+
+		player.draw(gl);
+		
 
 		// Clear the depth buffer to render the axis/dimension tool ontop of everything else
 		gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
@@ -116,17 +127,17 @@ public class Renderer implements GLEventListener {
 	private void setupFog(GL2 gl) {
 		float fogColor[] = {1, 1, 1, 1};
 		gl.glEnable(GL2.GL_FOG);
-		gl.glHint(GL2.GL_FOG_HINT, GL2.GL_NICEST);
+		//gl.glHint(GL2.GL_FOG_HINT, GL2.GL_NICEST);
 		
 		gl.glFogfv(GL2.GL_FOG_COLOR, fogColor, 0);
 		//gl.glFogi(GL2.GL_FOG_MODE, GL2.GL_LINEAR);
 		//gl.glFogf(GL2.GL_FOG_START, 1.0f);
 		//gl.glFogf(GL2.GL_FOG_END, 10.0f);
 		//gl.glFogf(GL2.GL_FOG_MODE, GL2.GL_EXP);
-		gl.glFogi(GL2.GL_FOG_MODE, GL2.GL_LINEAR);
-		gl.glFogf(GL2.GL_FOG_DENSITY, 0.005f);
-		gl.glFogf(GL2.GL_FOG_START, 50.0f);
-		gl.glFogf(GL2.GL_FOG_END, 70.0f);
+		gl.glFogi(GL2.GL_FOG_MODE, GL2.GL_EXP2);
+		gl.glFogf(GL2.GL_FOG_DENSITY, 0.01f);
+		gl.glFogf(GL2.GL_FOG_START, 100.0f);
+		gl.glFogf(GL2.GL_FOG_END, 200.0f);
 	}
     
 
@@ -161,13 +172,16 @@ public class Renderer implements GLEventListener {
 		sceneEntityList.add(dTool = new DimensionTool(gl));
 		sceneEntityList.add(testCube = new ObjObject("resources\\", "colorcube.obj", gl));
 		testCube.pos.y = 0.5;
-		sceneEntityList.add(terrain = new Terrain(200, 1.0, new ColorRGBA(61.0, 118.0, 40.0, 1.0)));
-		terrain.pos = new Vector3(-100, 0, -100);
-		sceneEntityList.add(plane = new ObjObject("resources\\", "sc.obj", Settings.gl));
+		skyBox = new SkyBox("resources\\SkyBox\\", "SkyBox.obj", Settings.gl);
+		skyBox.animated = true;
+		sceneEntityList.add(terrain = new Terrain(200, 10.0, new ColorRGBA(61.0, 118.0, 40.0, 1.0)));
 		sceneEntityList.add(player = new Player(camera));
+		skyBox.player = player;
+		skyBox.enable();
 		
-		sceneEntityList.add(tree = new IndexedObject(new ObjObject("resources\\", "sc.obj", Settings.gl).triDisplayList));
-
+		sceneEntityList.add(tree = new IndexedObject(new ObjObject("resources\\", "tree.obj", Settings.gl).triDisplayList));
+		tree.pos.x = 1;
+		tree.pos.z = 1;
 		enableScene();
 	}
 	

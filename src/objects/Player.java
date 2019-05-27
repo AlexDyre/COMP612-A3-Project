@@ -25,7 +25,7 @@ public class Player extends Entity {
     private double lastSecond;
     private double startPos;
 
-    private double planeSpeed = 1;
+    private double planeSpeed = 60;
 
     public Player(TrackingCamera cam) {
         super();
@@ -35,10 +35,10 @@ public class Player extends Entity {
         
         // Create and assign the skybox as a child object to the player
         pos = new Vector3(10,5,5);
-        this.addChild(this.skyBox = new SkyBox("resources\\SkyBox\\", "SkyBox.obj", Settings.gl));
+        //this.addChild(this.skyBox = new SkyBox("resources\\SkyBox\\", "SkyBox.obj", Settings.gl));
         this.addChild(this.plane = new ObjObject("resources\\", "sc.obj", Settings.gl));
         this.addChild(this.planeProp = new ObjObject("resources\\", "sc_prop.obj", Settings.gl));
-        planeProp.addChild(new DimensionTool(Settings.gl));
+        //planeProp.addChild(new DimensionTool(Settings.gl));
         // plane prop height on plane = 1.49468m
         this.planeProp.pos.y = 1.49468;
         
@@ -60,12 +60,6 @@ public class Player extends Entity {
     @Override
     public void animate(GL2 gl, double deltaTime) {
 
-        if (System.currentTimeMillis() / 1000 >= lastSecond + 1) {
-            System.out.println("Plane moved: " + (pos.z - startPos));
-            startPos = pos.z;
-            lastSecond = System.currentTimeMillis() / 1000;
-        }
-
         //rotation.y += 1 * deltaTime;
         //plane.rotation.y = 90;
         //planeProp.rotation.y = 90;
@@ -79,8 +73,28 @@ public class Player extends Entity {
 
         //System.out.println(rotation.y);
 
-        move(0.0, 0.05);
+        move(0.0, planeSpeed);
+
+        //skyBox.rotation = new Vector3(0 - rotation.x, 0 - rotation.y, 0 - rotation.z);
     }
+
+    @Override
+    public void transform(GL2 gl) {
+		// if a pivot point is set for the object, we need to rotate around that point
+		if (pivot) {
+			// to rotate around a pivot point, we need to move the object from 0,0,0 to the pivot point, apply rotation, then move back to 0,0,0 ready to apply normal translation
+			gl.glTranslated(pivotPoint.x, pivotPoint.y, pivotPoint.z);
+				gl.glRotated(pivotRot.r, pivotRot.x, pivotRot.y, pivotRot.z);
+			gl.glTranslated(-pivotPoint.x, -pivotPoint.y, -pivotPoint.z);
+		}
+
+		gl.glTranslated(pos.x, pos.y, pos.z); // translate the object from 0,0,0
+		//gl.glRotated(rot.r, rot.x, rot.y, rot.z); // rotate the object around the centre of its translated position (non pivot rotate)
+        gl.glRotated(rotation.x, 1, 0, 0);
+        gl.glRotated(rotation.y, 0, 1, 0);
+        gl.glRotated(rotation.z, 0, 0, 1);
+        gl.glScaled(scale.x, scale.y, scale.z); // scale the object
+	}
 
     @Override
     public void drawObject(GL2 gl) {
@@ -92,11 +106,8 @@ public class Player extends Entity {
         double horizontalDistance = distance * Math.cos(Math.toRadians(rotation.z));
 
         double theta = rotation.y + 90;
-        pos.x += horizontalDistance * Math.sin(Math.toRadians(theta));
-        pos.z += horizontalDistance * Math.cos(Math.toRadians(theta));
-
-
-        //pos.x += distance * Math.cos(Math.toRadians(rotation.y));
-        //pos.z += distance * Math.sin(Math.toRadians(rotation.y));
+        pos.x += horizontalDistance * Math.sin(Math.toRadians(theta)) * Settings.deltaTime;
+        pos.z += horizontalDistance * Math.cos(Math.toRadians(theta)) * Settings.deltaTime;
+        pos.y += verticalDistance * Settings.deltaTime;
 	}
 }

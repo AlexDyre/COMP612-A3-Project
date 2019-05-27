@@ -6,6 +6,8 @@ import util.Vector3;
 import util.obj.TexturedObjObject;
 
 public class SkyBox extends TexturedObjObject {
+
+    public Player player;
     /**
      * 
      * @param path
@@ -19,14 +21,17 @@ public class SkyBox extends TexturedObjObject {
 
     @Override
     public void animate(GL2 gl, double deltaTime) {
-
+        
+        pos = player.pos;
     }
 
     @Override
     public void drawObject(GL2 gl) {
+        
         // We need to make sure fog is disabled when drawing the skybox, then re-enable after
-        //gl.glDisable(GL2.GL_FOG);
+        gl.glDisable(GL2.GL_FOG);
             gl.glCallList(triDisplayList);
-        //gl.glEnable(GL2.GL_FOG);
+        gl.glEnable(GL2.GL_FOG);
     }
+    
 }
