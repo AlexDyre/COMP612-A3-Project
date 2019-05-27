@@ -139,7 +139,7 @@ public class Renderer implements GLEventListener {
 		//gl.glFogf(GL2.GL_FOG_MODE, GL2.GL_EXP);
 		gl.glFogi(GL2.GL_FOG_MODE, GL2.GL_EXP2);
 		gl.glFogf(GL2.GL_FOG_DENSITY, 0.01f);
-		gl.glFogf(GL2.GL_FOG_START, 100.0f);
+		gl.glFogf(GL2.GL_FOG_START, 150.0f);
 		gl.glFogf(GL2.GL_FOG_END, 200.0f);
 	}
     

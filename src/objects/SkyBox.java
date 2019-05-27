@@ -33,5 +33,4 @@ public class SkyBox extends TexturedObjObject {
             gl.glEnable(GL2.GL_FOG);
         gl.glDepthMask(true);
     }
-    
 }

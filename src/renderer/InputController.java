@@ -65,15 +65,18 @@ public class InputController implements KeyListener {
             break;
         case KeyEvent.VK_W:
             renderer.player.rotation.z -= 0.5 * inputSensitivity;
+            
             break;
         case KeyEvent.VK_S:
             renderer.player.rotation.z += 0.5 * inputSensitivity;
             break;
         case KeyEvent.VK_A:
             renderer.player.rotation.y += 0.5 * inputSensitivity;
+            //renderer.player.rotation.x += 0.5 * inputSensitivity;
             break;
         case KeyEvent.VK_D:
             renderer.player.rotation.y -= 0.5 * inputSensitivity;
+            //renderer.player.rotation.x -= 0.5 * inputSensitivity;
             break;
 		default:
 			break;
