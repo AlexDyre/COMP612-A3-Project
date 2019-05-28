@@ -30,7 +30,7 @@ public class TrackingCamera implements MouseListener, MouseMotionListener, Mouse
     public Player player;
 
     public double cameraDistance = 12.0;
-    public double angleAroundPlane = 0.0;
+    public double angleAroundPlane = 90.0;
     public double pitchAroundPlane = 18.0;
     public Vector3 pos;
 
@@ -126,10 +126,7 @@ public class TrackingCamera implements MouseListener, MouseMotionListener, Mouse
         // set up projection first
         gl.glMatrixMode(GL2.GL_PROJECTION);
         gl.glLoadIdentity();
-        // setting up perspective projection
-        // far distance is hardcoded to 3*cameraDistance. If your scene is bigger,
-        // you might need to adapt this
-        // default
+        // set up perspective projection
         glu.gluPerspective(fieldOfView, Settings.aspectRatio, 0.1, Settings.viewDistance);
 
         // then set up the camera position and orientation

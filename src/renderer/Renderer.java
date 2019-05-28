@@ -177,8 +177,9 @@ public class Renderer implements GLEventListener {
 		testCube.pos.y = 0.5;
 		skyBox = new SkyBox("resources\\SkyBox\\", "SkyBox.obj", Settings.gl);
 		skyBox.animated = true;
-		sceneEntityList.add(terrain = new Terrain(200, 10.0, new ColorRGBA(61.0, 118.0, 40.0, 1.0)));
+		
 		sceneEntityList.add(player = new Player(camera));
+		sceneEntityList.add(terrain = new Terrain(200, 10.0, new ColorRGBA(61.0, 118.0, 40.0, 1.0), player));
 		skyBox.player = player;
 		skyBox.enable();
 		

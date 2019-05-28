@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.jogamp.opengl.GL2;
 import objects.Entity;
 import objects.IndexedObject;
+import objects.Player;
 import renderer.Settings;
 import util.ColorRGBA;
 import util.Vector3;
@@ -18,14 +19,16 @@ public class Terrain extends Entity {
     private int displayList;
     private int numTrees = 100;
 
-    public Terrain(int size, double gridSquareSize, ColorRGBA terrainColor) {
+    public Terrain(int size, double gridSquareSize, ColorRGBA terrainColor, Player player) {
         super();
         this.size = size;
         this.gridSquareSize = gridSquareSize;
         this.terrain = new ArrayList<TerrainFace>();
         this.terrainColor = terrainColor;
         this.pos = new Vector3(-100, 0, -100);
+        this.addChild(new WorldPlane(300.0, -0.01, player, terrainColor));
         generateTerrain();
+        animated = true;
     }
 
     private void generateTerrain() {
@@ -60,7 +63,9 @@ public class Terrain extends Entity {
     }
 
 	@Override
-	public void animate(GL2 gl, double deltaTime) {}
+	public void animate(GL2 gl, double deltaTime) {
+        
+    }
 
 	@Override
 	public void drawObject(GL2 gl) {

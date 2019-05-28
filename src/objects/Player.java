@@ -17,6 +17,11 @@ public class Player extends Entity {
     public ObjObject planeProp;
     public TrackingCamera cam;
 
+    private boolean outside = false;
+    private boolean fixingRotation = false;
+    private boolean bellowGround = false;
+    private boolean aboveArea = false;
+
     private Vector3 cameraOffset = new Vector3(0, 6, 12);
     //private Vector3 cameraOffsetFirstPerson = new Vector3(0, 2, 2 );
 
@@ -26,6 +31,7 @@ public class Player extends Entity {
     private double startPos;
 
     private double planeSpeed = 60;
+    private double playAreaSize = 100;
 
     public Player(TrackingCamera cam) {
         super();
@@ -57,25 +63,45 @@ public class Player extends Entity {
         //this.cam.update();
     }
 
+    private void checkBounds() {
+        if (pos.x > playAreaSize || pos.x < -playAreaSize || pos.z > playAreaSize || pos.z < -playAreaSize) {
+            outside = true;
+        } else if (outside && fixingRotation) {
+            outside = false;
+            fixingRotation = false;
+        }
+
+        if (pos.y <= 0.1) {
+            bellowGround = true;
+        } else if (pos.y > playAreaSize) {
+            aboveArea = true;
+        }
+    }
+
     @Override
     public void animate(GL2 gl, double deltaTime) {
 
-        //rotation.y += 1 * deltaTime;
-        //plane.rotation.y = 90;
-        //planeProp.rotation.y = 90;
+        // Check the player is still inside bounds
+        checkBounds();
+        // If the player is outide the bounds, reverse direction
+        if (outside && !fixingRotation) {
+            fixingRotation = true;
+            rotation.y += 180;
+        }
 
-        //pos = new Vector3(0,5,0);
+        if (bellowGround) {
+            pos.y = 0.5;
+            rotation.z = 45;
+            bellowGround = false;
+        } else if (aboveArea) {
+            rotation.z = -45;
+            aboveArea = false;
+        }
 
-        //rotation.y = 0;
-        //rotation.z = 0;
-        //pos.z += planeSpeed;
+        // Rotate the planes propeller
         planeProp.rotation.x  += 10;
-
-        //System.out.println(rotation.y);
-
+        // Move the plane fowards
         move(0.0, planeSpeed);
-
-        //skyBox.rotation = new Vector3(0 - rotation.x, 0 - rotation.y, 0 - rotation.z);
     }
 
     @Override
@@ -100,6 +126,11 @@ public class Player extends Entity {
     public void drawObject(GL2 gl) {
     }
 
+    /**
+     * Moves an object fowards in the direction of rotation + offset
+     * @param rotOffset rotation offset
+     * @param distance distance to travel
+     */
     private void move(double rotOffset, double distance) {
 
         double verticalDistance = distance * Math.sin(Math.toRadians(rotation.z));
