@@ -56,10 +56,10 @@ public class InputController implements KeyListener {
             System.out.println("Fast Speed");
             Settings.speedModifier = Settings.Speed.FAST.speed;
 			break;
-        case KeyEvent.VK_SPACE:
-            System.out.println("Paused animation");
-            Settings.speedModifier = Settings.Speed.PAUSE.speed;
-            break;
+        //case KeyEvent.VK_SPACE:
+        //    System.out.println("Paused animation");
+        //    Settings.speedModifier = Settings.Speed.PAUSE.speed;
+        //    break;
         case KeyEvent.VK_BACK_QUOTE:
             renderer.toggleWireframe();
             break;
@@ -77,6 +77,9 @@ public class InputController implements KeyListener {
         case KeyEvent.VK_D:
             renderer.player.rotation.y -= 0.5 * inputSensitivity;
             //renderer.player.rotation.x -= 0.5 * inputSensitivity;
+            break;
+        case KeyEvent.VK_SPACE:
+            renderer.player.fireGun();
             break;
 		default:
 			break;

@@ -1,5 +1,7 @@
 package objects;
 
+import java.util.ArrayList;
+
 import com.jogamp.opengl.GL2;
 
 import renderer.Settings;
@@ -16,6 +18,14 @@ public class Player extends Entity {
     public ObjObject plane;
     public ObjObject planeProp;
     public TrackingCamera cam;
+
+    public float gunDamage = 60f;
+    public float gunFireRate = 0.015f;
+    public float bulletSpeed = 0f;
+    public int bulletIndex;
+    public double lastFireTime = 0;
+    public ArrayList<Bullet> bullets;
+    public ArrayList<Bullet> oldBullets;
 
     private boolean outside = false;
     private boolean fixingRotation = false;
@@ -38,6 +48,9 @@ public class Player extends Entity {
         this.rotation.y = 0.0;
         this.cam = cam;
         this.cam.player = this;
+        this.bullets = new ArrayList<Bullet>();
+        this.oldBullets = new ArrayList<Bullet>();
+       
         
         // Create and assign the skybox as a child object to the player
         pos = new Vector3(10,5,5);
@@ -61,6 +74,10 @@ public class Player extends Entity {
         lastSecond = System.currentTimeMillis() / 1000;
         startPos = pos.z;
         //this.cam.update();
+         // Load the bullet modelIndex
+        // TODO: use a propper model, not just a plane propeller....
+        this.bulletIndex = new ObjObject("resources\\", "colorcube.obj", Settings.gl).triDisplayList;
+        Bullet.player = this;
     }
 
     private void checkBounds() {
@@ -123,8 +140,7 @@ public class Player extends Entity {
 	}
 
     @Override
-    public void drawObject(GL2 gl) {
-    }
+    public void drawObject(GL2 gl) {}
 
     /**
      * Moves an object fowards in the direction of rotation + offset
@@ -140,5 +156,41 @@ public class Player extends Entity {
         pos.x += horizontalDistance * Math.sin(Math.toRadians(theta)) * Settings.deltaTime;
         pos.z += horizontalDistance * Math.cos(Math.toRadians(theta)) * Settings.deltaTime;
         pos.y += verticalDistance * Settings.deltaTime;
-	}
+    }
+
+    public void clearOldBullets() {
+        for (Bullet b : oldBullets) {
+            bullets.remove(b);
+        }
+
+        oldBullets.clear();
+    }
+
+    public void drawBullets(GL2 gl) {
+        
+        clearOldBullets();
+
+        for (Bullet b : bullets) {
+            b.draw(gl);
+        }
+    }
+    
+    public void fireGun() {
+        double currentTime = System.currentTimeMillis() / 1000;
+        if (currentTime >= lastFireTime + gunFireRate) {
+            System.out.println("Fired gun!");
+            lastFireTime = currentTime;
+
+            // create a bullet
+            Bullet bullet = new Bullet(bulletIndex, bulletSpeed);
+            bullet.pos = new Vector3(this.pos);
+            bullet.rotation = new Vector3(rotation);
+            bullet.enable();
+            bullets.add(bullet);
+        }
+    }
+
+    public void removeBullet(Bullet b) {
+        oldBullets.add(b);
+    }
 }

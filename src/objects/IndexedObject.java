@@ -12,9 +12,7 @@ public class IndexedObject extends Entity {
     }
 
     @Override
-    public void animate(GL2 gl, double deltaTime) {
-
-    }
+    public void animate(GL2 gl, double deltaTime) {}
 
     @Override
     public void drawObject(GL2 gl) {

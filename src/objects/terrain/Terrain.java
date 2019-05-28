@@ -26,7 +26,7 @@ public class Terrain extends Entity {
         this.terrain = new ArrayList<TerrainFace>();
         this.terrainColor = terrainColor;
         this.pos = new Vector3(-100, 0, -100);
-        this.addChild(new WorldPlane(300.0, -0.01, player, terrainColor));
+        this.addChild(new WorldPlane(600.0, -0.01, player, terrainColor));
         generateTerrain();
         animated = true;
     }

@@ -117,7 +117,7 @@ public class Renderer implements GLEventListener {
 
 
 		player.draw(gl);
-		
+		player.drawBullets(gl);
 
 		// Clear the depth buffer to render the axis/dimension tool ontop of everything else
 		gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
@@ -139,8 +139,8 @@ public class Renderer implements GLEventListener {
 		//gl.glFogf(GL2.GL_FOG_MODE, GL2.GL_EXP);
 		gl.glFogi(GL2.GL_FOG_MODE, GL2.GL_EXP2);
 		gl.glFogf(GL2.GL_FOG_DENSITY, 0.01f);
-		gl.glFogf(GL2.GL_FOG_START, 150.0f);
-		gl.glFogf(GL2.GL_FOG_END, 200.0f);
+		gl.glFogf(GL2.GL_FOG_START, 250.0f);
+		gl.glFogf(GL2.GL_FOG_END, 300.0f);
 	}
     
 
