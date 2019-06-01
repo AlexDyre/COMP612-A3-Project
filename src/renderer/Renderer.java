@@ -114,8 +114,6 @@ public class Renderer implements GLEventListener {
         //terrain
 		terrain.draw(gl);
 
-
-
 		player.draw(gl);
 		player.drawBullets(gl);
 

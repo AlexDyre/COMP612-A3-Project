@@ -42,48 +42,37 @@ public class InputController implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-		
-		switch (key) {
-		case KeyEvent.VK_1:
-            System.out.println("Slow Speed");
-            Settings.speedModifier = Settings.Speed.SLOW.speed;
-            break;
-        case KeyEvent.VK_2:
-            System.out.println("Normal Speed");
-            Settings.speedModifier = Settings.Speed.NORMAL.speed;
-            break;
-        case KeyEvent.VK_3:
-            System.out.println("Fast Speed");
-            Settings.speedModifier = Settings.Speed.FAST.speed;
-			break;
-        //case KeyEvent.VK_SPACE:
-        //    System.out.println("Paused animation");
-        //    Settings.speedModifier = Settings.Speed.PAUSE.speed;
-        //    break;
-        case KeyEvent.VK_BACK_QUOTE:
-            renderer.toggleWireframe();
-            break;
-        case KeyEvent.VK_W:
+
+        if (key == KeyEvent.VK_W) {
             renderer.player.rotation.z -= 0.5 * inputSensitivity;
-            
-            break;
-        case KeyEvent.VK_S:
+        } else if (key == KeyEvent.VK_S) {
             renderer.player.rotation.z += 0.5 * inputSensitivity;
-            break;
-        case KeyEvent.VK_A:
+        }
+
+        if (key == KeyEvent.VK_A) {
             renderer.player.rotation.y += 0.5 * inputSensitivity;
-            //renderer.player.rotation.x += 0.5 * inputSensitivity;
-            break;
-        case KeyEvent.VK_D:
+        } else if (key == KeyEvent.VK_D) {
             renderer.player.rotation.y -= 0.5 * inputSensitivity;
-            //renderer.player.rotation.x -= 0.5 * inputSensitivity;
-            break;
-        case KeyEvent.VK_SPACE:
+        }
+
+        if (key == KeyEvent.VK_SPACE) {
             renderer.player.fireGun();
-            break;
-		default:
-			break;
-		}
+        }
+
+        if (key == KeyEvent.VK_BACK_QUOTE) {
+            renderer.toggleWireframe();
+        }
+
+        /*
+        if (key == KeyEvent.) {
+            
+        }
+
+        if (key == KeyEvent.) {
+            
+        }
+		*/
+		
     }
 
     @Override

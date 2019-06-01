@@ -39,6 +39,7 @@ public class Bullet extends IndexedObject {
         
         if (collided) {
             System.out.println("Bullet collided with an object");
+            removeBullet();
         }
 
 
@@ -47,9 +48,12 @@ public class Bullet extends IndexedObject {
     public void checkLifeTime() {
         if (System.currentTimeMillis() / 1000 > endLifeTime) {
             // Bullet has reached end of life, delete it
-            //player.bullets.remove(this);
-            player.removeBullet(this);
+            removeBullet();
         }
+    }
+
+    private void removeBullet() {
+        player.removeBullet(this);
     }
 
     @Override

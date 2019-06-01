@@ -21,9 +21,9 @@ public class Player extends Entity {
 
     public float gunDamage = 60f;
     public float gunFireRate = 0.015f;
-    public float bulletSpeed = 0f;
+    public float bulletSpeed = 120f;
     public int bulletIndex;
-    public double lastFireTime = 0;
+    public double nextFireTime = 0;
     public ArrayList<Bullet> bullets;
     public ArrayList<Bullet> oldBullets;
 
@@ -34,11 +34,6 @@ public class Player extends Entity {
 
     private Vector3 cameraOffset = new Vector3(0, 6, 12);
     //private Vector3 cameraOffsetFirstPerson = new Vector3(0, 2, 2 );
-
-    private Vector3 forward = new Vector3(0, 0, 1);
-    //private Vector3 zero = new Vector3(0,0,0);
-    private double lastSecond;
-    private double startPos;
 
     private double planeSpeed = 60;
     private double playAreaSize = 100;
@@ -57,23 +52,17 @@ public class Player extends Entity {
         //this.addChild(this.skyBox = new SkyBox("resources\\SkyBox\\", "SkyBox.obj", Settings.gl));
         this.addChild(this.plane = new ObjObject("resources\\", "sc.obj", Settings.gl));
         this.addChild(this.planeProp = new ObjObject("resources\\", "sc_prop.obj", Settings.gl));
-        //planeProp.addChild(new DimensionTool(Settings.gl));
-        // plane prop height on plane = 1.49468m
+        // plane prop height on plane = 1.49468m (distance unit from 3D model)
         this.planeProp.pos.y = 1.49468;
         
 
         // Attach an axis tool for debugging
         this.addChild(new DimensionTool(Settings.gl));
 
-        //cam.pos.x -= 10;
-
         animated = true;
         this.planeSpeed /= 3.6; // Convert the speed of the plane from km/h to m/s
         this.cam.cameraOffset = cameraOffset;
         this.cam.pos = new Vector3(0,10,10);
-        lastSecond = System.currentTimeMillis() / 1000;
-        startPos = pos.z;
-        //this.cam.update();
          // Load the bullet modelIndex
         // TODO: use a propper model, not just a plane propeller....
         this.bulletIndex = new ObjObject("resources\\", "colorcube.obj", Settings.gl).triDisplayList;
@@ -97,7 +86,6 @@ public class Player extends Entity {
 
     @Override
     public void animate(GL2 gl, double deltaTime) {
-
         // Check the player is still inside bounds
         checkBounds();
         // If the player is outide the bounds, reverse direction
@@ -105,7 +93,7 @@ public class Player extends Entity {
             fixingRotation = true;
             rotation.y += 180;
         }
-
+        
         if (bellowGround) {
             pos.y = 0.5;
             rotation.z = 45;
@@ -176,18 +164,13 @@ public class Player extends Entity {
     }
     
     public void fireGun() {
-        double currentTime = System.currentTimeMillis() / 1000;
-        if (currentTime >= lastFireTime + gunFireRate) {
-            System.out.println("Fired gun!");
-            lastFireTime = currentTime;
-
-            // create a bullet
-            Bullet bullet = new Bullet(bulletIndex, bulletSpeed);
-            bullet.pos = new Vector3(this.pos);
-            bullet.rotation = new Vector3(rotation);
-            bullet.enable();
-            bullets.add(bullet);
-        }
+        // create a bullet
+        Bullet bullet = new Bullet(bulletIndex, bulletSpeed);
+        bullet.pos = new Vector3(this.pos);
+        bullet.rotation = new Vector3(rotation);
+        bullet.enable();
+        bullets.add(bullet);
+        
     }
 
     public void removeBullet(Bullet b) {
