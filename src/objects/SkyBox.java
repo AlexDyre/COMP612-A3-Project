@@ -27,10 +27,14 @@ public class SkyBox extends TexturedObjObject {
     @Override
     public void drawObject(GL2 gl) {
         gl.glDepthMask(false);
-            // We need to make sure fog is disabled when drawing the skybox, then re-enable after
+            // We need to disable a section of GL enabled functions before rendering the skybox, this ensures the skybox is rendered correctly
+            gl.glDisable(GL2.GL_DEPTH_TEST);
             gl.glDisable(GL2.GL_FOG);
+            gl.glDisable(GL2.GL_LIGHTING);
                 gl.glCallList(triDisplayList);
             gl.glEnable(GL2.GL_FOG);
+            gl.glEnable(GL2.GL_LIGHTING);
+            gl.glEnable(GL2.GL_DEPTH_TEST);
         gl.glDepthMask(true);
     }
 }

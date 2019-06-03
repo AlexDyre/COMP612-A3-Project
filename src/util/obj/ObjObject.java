@@ -61,7 +61,6 @@ public class ObjObject extends Entity {
 	 * @param index
 	 */
 	protected void compileTriList(GL2 gl) {
-		System.out.println("Compiling tri list");
 		gl.glNewList(triDisplayList, GL2.GL_COMPILE);
 		
 		// set a default white color as default

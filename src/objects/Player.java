@@ -36,7 +36,7 @@ public class Player extends Entity {
     //private Vector3 cameraOffsetFirstPerson = new Vector3(0, 2, 2 );
 
     //private double planeSpeed = 60;
-    private double planeSpeed = 0;
+    private double planeSpeed = 60;
     private double playAreaSize = 100;
 
     public Player(TrackingCamera cam) {

@@ -1,10 +1,10 @@
 package util.obj;
 
-public class Texture {
+public class ObjTexture {
     public String name;
     public int textureID;
 
-    public Texture() {
+    public ObjTexture() {
         this.name = "";
         this.textureID = 0;
     }

@@ -106,8 +106,6 @@ public class TrackingCamera implements MouseListener, MouseMotionListener, Mouse
             target = player.pos;
         } else {
             pos = new Vector3(player.pos.x + firstPersonOffset.x, player.pos.y + firstPersonOffset.y, player.pos.z + firstPersonOffset.z);
-       
-            //target
         }
         
     }
@@ -195,33 +193,6 @@ public class TrackingCamera implements MouseListener, MouseMotionListener, Mouse
             fieldOfView = MAX_FOV;
         }
     }
-
-    /**
-     * Sets up the lookAt point
-     * @param x X coordinate of the lookAt point
-     * @param y Y coordinate of the lookAt point
-     * @param z Z coordinate of the lookAt point
-     */
-    public void setLookAt(double x, double y, double z) {
-        //lookAt = new double[]{x, y, z};
-    }
-
-    // TODO: Re-implement?
-    /**
-     * Resets the camera rotations.
-     */
-    /*
-    public void reset() {
-        rotation.x = rotation.y = 0;
-        oldMousePos = null;
-    }
-
-    public void setAngle(double x, double y) {
-        rotation.x = x;
-        rotation.y = y;
-        oldMousePos = null;
-    }
-    */
 
     /**
      * Passes a new window size to the camera.

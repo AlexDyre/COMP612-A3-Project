@@ -29,6 +29,8 @@ public class Renderer implements GLEventListener {
 	private InputController ic;
     private TrackingCamera camera;
 	private GL2 gl;
+
+	public float spotlightPosition[] = {6.0f, 1.0f, 6.0f, 1};
 	
 	// Keep a register of all the objects in the scene
 	private ArrayList<Entity> sceneEntityList;
@@ -63,7 +65,6 @@ public class Renderer implements GLEventListener {
 		double _tick = System.currentTimeMillis() / 1000.0;
 		Settings.deltaTime = _tick - Settings.prevTick;
 		Settings.prevTick = _tick;
-		//System.out.println("Delta Time: " + Settings.deltaTime);
 	}
 
 	/**
@@ -100,14 +101,16 @@ public class Renderer implements GLEventListener {
 			gl.glPolygonMode(GL2.GL_FRONT, GL2.GL_FILL);
 		}
 
-        
-        // Lights
-		lights(gl);
+		// Execute any player controls
+		ic.triggerActions();
+
 		// Camera
 		camera.draw(gl);
+		// Lights
+		target.updateLightPosition();
 
 		gl.glDisable(GL2.GL_DEPTH_TEST);
-		skyBox.draw(gl);
+			skyBox.draw(gl);
 		gl.glEnable(GL2.GL_DEPTH_TEST);
 		
         //terrain
@@ -118,18 +121,21 @@ public class Renderer implements GLEventListener {
 		player.draw(gl);
 		player.drawBullets(gl);
 
+		
+
 		// Clear the depth buffer to render the axis/dimension tool ontop of everything else
 		gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
-		dTool.draw(gl);
+		//dTool.draw(gl);
+
+		
 
 		// Flush before ending frame\
         gl.glFlush();
     }
 
 	private void setupFog(GL2 gl) {
-		float fogColor[] = {1, 1, 1, 1};
+		float fogColor[] = {0.9f, 0.9f, 0.9f, 1f};
 		gl.glEnable(GL2.GL_FOG);
-		//gl.glHint(GL2.GL_FOG_HINT, GL2.GL_NICEST);
 		
 		gl.glFogfv(GL2.GL_FOG_COLOR, fogColor, 0);
 		//gl.glFogi(GL2.GL_FOG_MODE, GL2.GL_LINEAR);
@@ -167,7 +173,7 @@ public class Renderer implements GLEventListener {
 		// TODO: Fog should be re-enabled
 		setupFog(gl);
 
-        //use the lights
+		//use the lights
 		this.lights(gl);
 
 		
@@ -207,10 +213,13 @@ public class Renderer implements GLEventListener {
 	 * @param gl
 	 */
 	private void lights(GL2 gl) {
+		//normalise the surface normals for lighting calculations
+		gl.glEnable(GL2.GL_NORMALIZE);
 		// lighting stuff
 		float ambient[] = { 0.3f, 0.3f, 0.3f, 1 };
 		float diffuse[] = { 1f, 1f, 1f, 1 };
 		float specular[] = { 1, 1, 1, 1 };
+		
 		
 		float[] ambientLight = { 0.1f, 0.1f, 0.1f, 1f };  // weak RED (this is really a white light?) ambient 
 		gl.glLightfv(GL2.GL_LIGHT3, GL2.GL_AMBIENT, ambientLight, 0); 
@@ -227,25 +236,38 @@ public class Renderer implements GLEventListener {
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, diffuse, 0);
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, specular, 0);
 
+		float spotLightDirection[] = {5,0 ,0};
+		float spotLightAmbient[] = {1.0f, 0f, 0f, 1 };
+		float spotLightDiffuse[] = { 1f, 0f, 0f, 1 };
+		float zeroPosition[] = {0,0,0,1};
+		gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_AMBIENT, spotLightAmbient, 0);
+		
+		//gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_DIFFUSE, spotLightDiffuse, 0);
+		//gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_SPECULAR, specular, 0);
+		gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_POSITION, zeroPosition, 0);
+		gl.glLightf(GL2.GL_LIGHT2, GL2.GL_SPOT_CUTOFF, 90.0f);
+		gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_SPOT_DIRECTION, spotLightDirection, 0);
+		gl.glLightf(GL2.GL_LIGHT2, GL2.GL_SPOT_EXPONENT, 60.0f);
+		//gl.glLightf(GL2.GL_LIGHT2, GL2.GL_CONSTANT_ATTENUATION, 1.0f);
+		//gl.glLightf(GL2.GL_LIGHT2, GL2.GL_LINEAR_ATTENUATION, 0.0f);
+		//gl.glLightf(GL2.GL_LIGHT2, GL2.GL_QUADRATIC_ATTENUATION, 0.0f);
+
 		gl.glEnable(GL2.GL_LIGHTING);
-		gl.glEnable(GL2.GL_LIGHT0);
-		gl.glEnable(GL2.GL_LIGHT1);
-		//gl.glEnable(GL2.GL_LIGHT2);
-		//gl.glEnable(GL2.GL_LIGHT3);
+		//gl.glEnable(GL2.GL_LIGHT0);
+		//gl.glEnable(GL2.GL_LIGHT1);
+		gl.glEnable(GL2.GL_LIGHT2);
+		gl.glEnable(GL2.GL_LIGHT3);
 
 		//lets use use standard color functions
 		gl.glEnable(GL2.GL_COLOR_MATERIAL);
 		//gl.glColorMaterial(GL2.GL_FRONT, GL2.GL_DIFFUSE);
-		//normalise the surface normals for lighting calculations
-		gl.glEnable(GL2.GL_NORMALIZE);
+
 	}
 
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         GL2 gl = drawable.getGL().getGL2();
 		GLU glu = new GLU();
-		
-		//height = (height == 0) ? 1 : height;
 
 		// avoid a divide by zero error when calculating aspect ratio
 		height = (height <= 0) ? 1 : height;

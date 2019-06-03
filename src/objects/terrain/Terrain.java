@@ -47,7 +47,6 @@ public class Terrain extends Entity {
         }
         ObjObject treeModel = new ObjObject("resources\\", "tree.obj", Settings.gl);
         double terrainSize = gridSquareSize * (double) size;
-        System.err.println("Terrain size: " + terrainSize);
 
         for (int i = 0; i < numTrees; i++) {
             IndexedObject tree = new IndexedObject(treeModel.triDisplayList);
@@ -55,7 +54,6 @@ public class Terrain extends Entity {
             double y = 0 - pos.y;
             double z = (Math.random() * terrainSize) - (terrainSize/2) - pos.z;
             tree.pos = new Vector3(x, y, z);
-            System.out.println("Generated Tree Pos: " + tree.pos);
             this.addChild(tree);
         }
 

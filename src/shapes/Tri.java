@@ -39,4 +39,8 @@ public class Tri {
 		this.useMtl = false;
 		this.material = null;
 	}
+
+	public void setTextureID() {
+		textureID = material.textureID;
+	}
 }

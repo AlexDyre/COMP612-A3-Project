@@ -10,7 +10,7 @@ public class MtlLibrary {
 
 	public String name;
 	public ArrayList<ObjMtl> materials;
-	public ArrayList<Texture> textures;
+	public ArrayList<ObjTexture> textures;
 	
 	public MtlLibrary(String name) {
 		this.name = name;

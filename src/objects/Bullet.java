@@ -38,11 +38,8 @@ public class Bullet extends IndexedObject {
             collided = true;
         
         if (collided) {
-            System.out.println("Bullet collided with an object");
             removeBullet();
         }
-
-
     }
 
     public void checkLifeTime() {

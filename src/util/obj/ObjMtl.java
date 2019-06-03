@@ -34,9 +34,4 @@ public class ObjMtl {
 		this.map_Kd = "";
 		this.textured = false;
 	}
-
-	@Override
-	public String toString() {
-		return mtlName + " D: " + diffuse;
-	}
 }

@@ -2,6 +2,7 @@ package renderer;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import com.jogamp.opengl.awt.GLCanvas;
 
@@ -13,7 +14,15 @@ public class InputController implements KeyListener {
 
     private Renderer renderer;
 
-    private double inputSensitivity = 5;
+    private ArrayList<Integer> keys;
+
+    private double inputSensitivity = 2;
+
+    private boolean up = false;
+    private boolean down = false;
+    private boolean left = false;
+    private boolean right = false;
+    private boolean fire = false;
 
     /**
      * Constructor for the input controller
@@ -22,6 +31,7 @@ public class InputController implements KeyListener {
      */
     public InputController (GLCanvas canvas, Renderer renderer) {
         this.renderer = renderer;
+        this.keys = new ArrayList<Integer>();
         canvas.addKeyListener(this);
         printControls();
     }
@@ -36,7 +46,19 @@ public class InputController implements KeyListener {
         System.out.println("2: Normal Speed");
         System.out.println("3: Fast Speed");
         System.out.println("~: Toggle Wireframe");
-        System.out.println("Arrow Keys: Set Camera Orientation");
+    }
+
+    public void triggerActions() {
+        if (up)
+            renderer.player.rotation.z += 0.5 * inputSensitivity;
+        if (down)
+            renderer.player.rotation.z -= 0.5 * inputSensitivity;
+        if (left)
+            renderer.player.rotation.y += 0.5 * inputSensitivity;
+        if (right)
+            renderer.player.rotation.y -= 0.5 * inputSensitivity;
+        if (fire)
+            renderer.player.fireGun();
     }
 
     @Override
@@ -44,19 +66,19 @@ public class InputController implements KeyListener {
         int key = e.getKeyCode();
 
         if (key == KeyEvent.VK_W) {
-            renderer.player.rotation.z -= 0.5 * inputSensitivity;
+            down = true;
         } else if (key == KeyEvent.VK_S) {
-            renderer.player.rotation.z += 0.5 * inputSensitivity;
+            up = true;
         }
 
         if (key == KeyEvent.VK_A) {
-            renderer.player.rotation.y += 0.5 * inputSensitivity;
+            left = true;
         } else if (key == KeyEvent.VK_D) {
-            renderer.player.rotation.y -= 0.5 * inputSensitivity;
+            right = true;
         }
 
         if (key == KeyEvent.VK_SPACE) {
-            renderer.player.fireGun();
+            fire = true;
         }
 
         if (key == KeyEvent.VK_BACK_QUOTE) {
@@ -76,7 +98,25 @@ public class InputController implements KeyListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
+    public void keyReleased(KeyEvent e) {
+        int key = e.getKeyCode();
+
+        if (key == KeyEvent.VK_W) {
+            down = false;
+        } else if (key == KeyEvent.VK_S) {
+            up = false;
+        }
+
+        if (key == KeyEvent.VK_A) {
+            left = false;
+        } else if (key == KeyEvent.VK_D) {
+            right = false;
+        }
+
+        if (key == KeyEvent.VK_SPACE) {
+            fire = false;
+        }
+    }
 
     @Override
     public void keyTyped(KeyEvent e) {}

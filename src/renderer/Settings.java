@@ -5,11 +5,11 @@ import com.jogamp.opengl.GL2;
 public class Settings {
 
 	// Debug flag
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 	
 	// View Settings
 	// 1.0 GL units = 1.0m
-	public static double viewDistance = 550.0; // View distance is set slightly further than the furthest point of the sky box
+	public static double viewDistance = 850.0; // View distance is set slightly further than the furthest point of the sky box
 
 	// Window size fields
 	public static int windowWidth = 1920 / 2;
