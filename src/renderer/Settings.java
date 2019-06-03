@@ -2,10 +2,13 @@ package renderer;
 
 import com.jogamp.opengl.GL2;
 
+/**
+ * Static settings class for project settings
+ */
 public class Settings {
 
 	// Debug flag
-	public static boolean DEBUG = true;
+	public static boolean DEBUG = false;
 	
 	// View Settings
 	// 1.0 GL units = 1.0m
@@ -14,7 +17,9 @@ public class Settings {
 	// Window size fields
 	public static int windowWidth = 1920 / 2;
 	public static int windowHeight = (1080 / 2);
-    public static double aspectRatio;
+	public static double aspectRatio;
+	
+	public static int numSamples = 4;
 
 	// OpenGL Fields
     public static GL2 gl;
@@ -52,6 +57,9 @@ public class Settings {
 		}
 	}
 
+	/**
+	 * Updates the game window resolution aspect ratio
+	 */
 	public void updateResolution() {
 		aspectRatio = (double)windowWidth / (double)windowHeight;
 	}

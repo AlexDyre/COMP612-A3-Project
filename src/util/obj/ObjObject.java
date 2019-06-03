@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import com.jogamp.opengl.GL2;
 
 import objects.Entity;
-import renderer.Main;
-import renderer.Settings;
 import shapes.Tri;
 import util.ColorRGB;
 import util.Vector2;
@@ -49,7 +47,6 @@ public class ObjObject extends Entity {
 		this.modelFilename = fileName;
 		this.path = path;
 		ObjLoader.importModel(path, fileName, this);
-		// TODO: Re-reference
 		this.triDisplayList = gl.glGenLists(1);
 
 		compileTriList(gl);

@@ -1,6 +1,7 @@
 package objects.terrain;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.jogamp.opengl.GL2;
 import objects.Entity;
@@ -11,6 +12,10 @@ import util.ColorRGBA;
 import util.Vector3;
 import util.obj.ObjObject;
 
+/**
+ * Defines a terrain object
+ * @author Jordan Carter - 1317225
+ */
 public class Terrain extends Entity {
     public int size;
     public double gridSquareSize;
@@ -19,6 +24,13 @@ public class Terrain extends Entity {
     private int displayList;
     private int numTrees = 100;
 
+    /**
+     * Constructor for a terrain object
+     * @param size
+     * @param gridSquareSize
+     * @param terrainColor
+     * @param player
+     */
     public Terrain(int size, double gridSquareSize, ColorRGBA terrainColor, Player player) {
         super();
         this.size = size;
@@ -31,6 +43,9 @@ public class Terrain extends Entity {
         animated = true;
     }
 
+    /**
+     * Generates the terrain
+     */
     private void generateTerrain() {
         GL2 gl = Settings.gl;
         gridSquareSize = 1;
@@ -46,10 +61,15 @@ public class Terrain extends Entity {
             }
         }
         ObjObject treeModel = new ObjObject("resources\\", "tree.obj", Settings.gl);
+        ObjObject treeModel2 = new ObjObject("resources\\", "Tree1.obj", Settings.gl);
+        ObjObject bush = new ObjObject("resources\\", "bush.obj", Settings.gl);
         double terrainSize = gridSquareSize * (double) size;
+        int[] treeDisplayLists = {treeModel.triDisplayList, treeModel2.triDisplayList, bush.triDisplayList};
+
+        Random rand = new Random();
 
         for (int i = 0; i < numTrees; i++) {
-            IndexedObject tree = new IndexedObject(treeModel.triDisplayList);
+            IndexedObject tree = new IndexedObject(treeDisplayLists[rand.nextInt(treeDisplayLists.length)]);
             double x = (Math.random() * terrainSize) - (terrainSize/2) - pos.x;
             double y = 0 - pos.y;
             double z = (Math.random() * terrainSize) - (terrainSize/2) - pos.z;
@@ -70,6 +90,10 @@ public class Terrain extends Entity {
 		gl.glCallList(displayList);
 	}
 
+    /**
+     * Generates the display list for the terrain
+     * @param gl
+     */
     private void generateDisplayList(GL2 gl) {
         displayList = Settings.gl.glGenLists(1);
 

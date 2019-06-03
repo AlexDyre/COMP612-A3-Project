@@ -2,6 +2,10 @@ package objects.terrain;
 
 import util.Vector3;
 
+/**
+ * Class for a terrain face object
+ * @author Jordan Carter - 1317225
+ */
 public class TerrainFace {
     public Vector3 v1, v2, v3, v4;
 

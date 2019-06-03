@@ -24,6 +24,10 @@ public abstract class Entity {
 
 	private boolean enabled = false;
 	
+	/**
+	 * Default constructor for an entity
+	 * Initialises blank, default field values
+	 */
 	public Entity() {
 		this.pos = new Vector3(0,0,0); // every object will have a position
 		this.pivotPoint = new Vector3(0,0,0);
@@ -39,6 +43,10 @@ public abstract class Entity {
 		this.rot.rotateEuler(this.rotation);
 	}
 	
+	/**
+	 * Adds a child to this entity
+	 * @param child
+	 */
 	public void addChild(Entity child) {
 		// if the object has no children, create an array to store child(ren)
 		if (children == null) {
@@ -121,6 +129,9 @@ public abstract class Entity {
 		}
 	}
 
+	/**
+	 * Enables the object and all children
+	 */
 	public void enable() {
 		enabled = true;
 

@@ -10,15 +10,10 @@ import com.jogamp.opengl.util.texture.TextureIO;
 
 import shapes.Tri;
 import util.ColorRGB;
-import util.Vector2;
-import util.Vector3;
 
 public class TexturedObjObject extends ObjObject {
 
-    //private Texture[] textures;
-
     private ArrayList<Texture> textures;
-    private ArrayList<String> loadedTextures;
     
     public TexturedObjObject(String path, String fileName, GL2 gl) {
         super();
@@ -38,6 +33,10 @@ public class TexturedObjObject extends ObjObject {
         
     }
 
+    /**
+     * Loads the textures from the material library
+     * @param path
+     */
     private void loadTextures(String path) {
         int texCount = 0;
         for (ObjMtl mat : mtlLibrary.materials) {
@@ -54,6 +53,9 @@ public class TexturedObjObject extends ObjObject {
         }
     }
 
+    /**
+     * Applys the loaded texture ids to the faces for the object
+     */
     private void applyFaceTextureReferences() {
         for (Tri face : faces) {
             face.setTextureID();

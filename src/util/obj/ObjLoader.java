@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import renderer.Main;
 import renderer.Settings;
 import shapes.Tri;
 import util.Vector2;
@@ -19,11 +18,11 @@ import util.Vector3;
  */
 public class ObjLoader {
 	
-	//private static boolean DEBUG = true;
-	
 	/**
-	 * 
+	 * Imports a model from file
 	 * @param path
+	 * @param fileName
+	 * @param object
 	 * @return
 	 */
 	public static ObjObject importModel(String path, String fileName, ObjObject object) {

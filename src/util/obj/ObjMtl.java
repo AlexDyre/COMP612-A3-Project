@@ -23,7 +23,10 @@ public class ObjMtl {
 	public Texture texture;
 	public int textureID;
 	
-
+	/**
+	 * Default constructor for objmtl
+	 * @param mtlName
+	 */
 	public ObjMtl(String mtlName) {
 		this.mtlName = mtlName;
 		this.ambient = new ColorRGB();

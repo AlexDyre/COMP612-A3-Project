@@ -54,10 +54,14 @@ public class InputController implements KeyListener {
             renderer.player.rotation.z += 0.5 * inputSensitivity;
         if (down)
             renderer.player.rotation.z -= 0.5 * inputSensitivity;
-        if (left)
+        if (left) {
             renderer.player.rotation.y += 0.5 * inputSensitivity;
-        if (right)
+            renderer.player.plane.rotation.x = -15;
+        }
+        if (right) {
             renderer.player.rotation.y -= 0.5 * inputSensitivity;
+            renderer.player.plane.rotation.x = 15;
+        }
         if (fire)
             renderer.player.fireGun();
     }
@@ -71,33 +75,26 @@ public class InputController implements KeyListener {
         } else if (key == KeyEvent.VK_S) {
             up = true;
         }
-
         if (key == KeyEvent.VK_A) {
             left = true;
         } else if (key == KeyEvent.VK_D) {
             right = true;
         }
-
         if (key == KeyEvent.VK_SPACE) {
             fire = true;
         }
-
         if (key == KeyEvent.VK_BACK_QUOTE) {
             renderer.toggleWireframe();
         }
-
         if (key == KeyEvent.VK_1) {
             Settings.speedModifier = Settings.Speed.SLOW.speed;
         }
-
         if (key == KeyEvent.VK_2) {
             Settings.speedModifier = Settings.Speed.NORMAL.speed;
         }
-
         if (key == KeyEvent.VK_3) {
             Settings.speedModifier = Settings.Speed.FAST.speed;
         }
-
         if (key == KeyEvent.VK_4) {
             Settings.speedModifier = Settings.Speed.VFAST.speed;
         }
@@ -112,13 +109,13 @@ public class InputController implements KeyListener {
         } else if (key == KeyEvent.VK_S) {
             up = false;
         }
-
         if (key == KeyEvent.VK_A) {
             left = false;
+            renderer.player.plane.rotation.x = 0;
         } else if (key == KeyEvent.VK_D) {
             right = false;
+            renderer.player.plane.rotation.x = 0;
         }
-
         if (key == KeyEvent.VK_SPACE) {
             fire = false;
         }

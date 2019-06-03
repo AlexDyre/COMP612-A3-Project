@@ -2,10 +2,19 @@ package objects;
 
 import com.jogamp.opengl.GL2;
 
+/**
+ * Defines an indexed object.
+ * Object does not define or import it's own model, but uses a predefined display list
+ * @author Jordan Carter - 1317225
+ */
 public class IndexedObject extends Entity {
 
     public int modelIndex;
 
+    /**
+     * IndexedObject constructor
+     * @param modelIndexValue
+     */
     public IndexedObject (int modelIndexValue) {
         super();
         this.modelIndex = modelIndexValue;

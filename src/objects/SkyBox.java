@@ -7,6 +7,7 @@ import util.obj.TexturedObjObject;
 
 /**
  * Class for a Skybox object
+ * @author Jordan Carter - 1317225
  */
 public class SkyBox extends TexturedObjObject {
 

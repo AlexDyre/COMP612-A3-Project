@@ -1,30 +1,26 @@
 package renderer;
 
-//package <your package>;
-/**
- * Class for a simple camera that rotates around the point of view
- * using mouse dragging.
- *
- * @author Jacqueline Whalley
- */
-
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
-import java.util.Vector;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 
-import objects.Entity;
 import objects.Player;
 import util.Vector3;
 
-
+/**
+ * Class for a simple camera that rotates around the point of view
+ * using mouse dragging.
+ *
+ * @author Jacqueline Whalley
+ * @author Jordan Carter - 1317225
+ */
 public class TrackingCamera implements MouseListener, MouseMotionListener, MouseWheelListener {
 
     public Player player;
@@ -45,7 +41,6 @@ public class TrackingCamera implements MouseListener, MouseMotionListener, Mouse
     // the point to look at
     private Vector3 target = new Vector3(0,0,0);
     private Vector3 forward = new Vector3(0, 1, 0);
-    private Vector3 side = new Vector3(1, 0, 0);
 
     public Vector3 cameraOffset = new Vector3();
 
@@ -208,9 +203,7 @@ public class TrackingCamera implements MouseListener, MouseMotionListener, Mouse
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-    	//System.out.println("CLICK");
-    }
+    public void mouseClicked(MouseEvent e) { }
 
     @Override
     public void mousePressed(MouseEvent e) {
@@ -238,14 +231,8 @@ public class TrackingCamera implements MouseListener, MouseMotionListener, Mouse
         if (oldMousePos != null) {
             // dragging with left mouse button: rotate
             if (mouseButton == MouseEvent.BUTTON1) {
-
-                //rotation.x -= p.x - oldMousePos.x;
                 angleAroundPlane -= (p.x - oldMousePos.x) * 0.1;
                 pitchAroundPlane += (p.y - oldMousePos.y) * 0.1;
-
-                // limit Y rotation angle to avoid gimbal lock
-                // TODO: look at rotation lock again
-                //rotation.y = Math.min(89.9, Math.max(-89.9, rotation.y));
             } // dragging with right mouse button: change distance
             else if (mouseButton == MouseEvent.BUTTON3) {
                 distanceToOrigin += 0.1 * (p.y - oldMousePos.y);

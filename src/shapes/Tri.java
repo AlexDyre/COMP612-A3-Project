@@ -5,13 +5,15 @@ import util.Vector2;
 import util.Vector3;
 import util.obj.ObjMtl;
 
+/**
+ * Defines a triangle face, used by the .obj model importer for every face.
+ * @author Jordan Carter - 1317225
+ */
 public class Tri {
 	public Vector3 v1, v2, v3, normal;
 	public Vector2 vt1, vt2, vt3;
 	public int[] vertexPos;
 	public int textureID;
-    // TODO: ensure this isn't used
-	//public ColorRGB color;
 	public ObjMtl material;
 	public boolean useMtl, textured;
 	@SuppressWarnings("unused") // Field is referenced outside of local context
@@ -40,6 +42,9 @@ public class Tri {
 		this.material = null;
 	}
 
+	/**
+	 * Sets a faces texture ID
+	 */
 	public void setTextureID() {
 		textureID = material.textureID;
 	}

@@ -19,13 +19,8 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
 
-import objects.Entity;
-import objects.Player;
-
 
 public class TrackballCamera implements MouseListener, MouseMotionListener, MouseWheelListener {
-
-    private Player player;
 
     // some hard limitations to camera values
     private static final double MIN_DISTANCE = 1;

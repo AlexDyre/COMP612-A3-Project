@@ -7,6 +7,10 @@ import objects.Player;
 import renderer.Settings;
 import util.ColorRGBA;
 
+/**
+ * Class for a world plane object
+ * @author Jordan Carter - 1317225
+ */
 public class WorldPlane extends Entity {
 
     private int displayList;
@@ -15,6 +19,13 @@ public class WorldPlane extends Entity {
     private double yHeight;
     private Player player;
 
+    /**
+     * Constructor for a world plane
+     * @param size
+     * @param yHeight
+     * @param player
+     * @param terrainColor
+     */
     public WorldPlane (double size, double yHeight, Player player, ColorRGBA terrainColor) {
         super();
         this.size = size;
@@ -24,8 +35,6 @@ public class WorldPlane extends Entity {
         generateDisplayList(Settings.gl);
         animated = true;
     }
-
-    
 
     @Override
     public void animate(GL2 gl, double deltaTime) {
@@ -38,6 +47,10 @@ public class WorldPlane extends Entity {
 		gl.glCallList(displayList);
 	}
 
+    /**
+     * Generates the display list
+     * @param gl
+     */
     private void generateDisplayList(GL2 gl) {
         displayList = Settings.gl.glGenLists(1);
 

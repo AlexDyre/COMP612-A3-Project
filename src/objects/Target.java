@@ -4,7 +4,6 @@ import com.jogamp.opengl.GL2;
 
 import objects.terrain.Terrain;
 import renderer.Settings;
-import util.Vector3;
 import util.obj.TexturedObjObject;
 
 /**
@@ -31,8 +30,6 @@ public class Target extends TexturedObjObject {
         this.player = player;
         this.animated = true;
         this.terrainSize = terrain.gridSquareSize * (double) terrain.size;
-        // Generate a random position to start
-        //movePosition();
     }
 
     /**
@@ -75,7 +72,7 @@ public class Target extends TexturedObjObject {
         float xPos = (float) (spotlightRadius * Math.cos(rad));
         float zPos = (float) (spotlightRadius * Math.sin(rad));
         
-        float spotLightDirection[] = {xPos, 0, zPos}; // direction is a vector, not actual coordinates, however the values do not need clamping (normalising)
+        float spotLightDirection[] = {xPos, -1.5f, zPos}; // direction is a vector, not actual coordinates, however the values do not need clamping (normalising)
         float[] position = {(float) pos.x, 4.5f, (float) pos.z, 1};
         // Update the light
         Settings.gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_POSITION, position, 0);

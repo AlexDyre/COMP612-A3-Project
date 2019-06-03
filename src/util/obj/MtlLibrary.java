@@ -10,8 +10,10 @@ public class MtlLibrary {
 
 	public String name;
 	public ArrayList<ObjMtl> materials;
-	public ArrayList<ObjTexture> textures;
 	
+	/**
+	 * Constructor for a Material Library
+	 */
 	public MtlLibrary(String name) {
 		this.name = name;
 		this.materials = new ArrayList<ObjMtl>();

@@ -4,6 +4,8 @@ import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
 
@@ -25,7 +27,15 @@ public class Main {
 			System.out.println("Initialising Project");
 		
 		Frame frame = new Frame("COMP612 Project/A3");
-		GLCanvas canvas = new GLCanvas();
+
+		GLProfile profile = GLProfile.get(GLProfile.GL2);
+        GLCapabilities capabilities = new GLCapabilities(profile);
+        
+        // Enable multi sampling to provide anti-aliasing
+	    capabilities.setSampleBuffers(true);
+	    capabilities.setNumSamples(Settings.numSamples); // This can be turned down if the computer is not powerful enough
+
+		GLCanvas canvas = new GLCanvas(capabilities);
 		renderer = new Renderer(canvas);
 		
 		canvas.addGLEventListener(renderer);

@@ -10,14 +10,17 @@ import com.jogamp.opengl.glu.GLU;
 
 import objects.DimensionTool;
 import objects.Entity;
-import objects.IndexedObject;
 import objects.Player;
 import objects.SkyBox;
 import objects.Target;
 import objects.terrain.Terrain;
 import util.ColorRGBA;
-import util.obj.ObjObject;
 
+/**
+ * Renderer class for the project
+ * 1 GL unit = 1 Real World meter
+ * @author Jordan Carter - 1317225
+ */
 public class Renderer implements GLEventListener {
 
 	public boolean wireframe;
@@ -25,7 +28,6 @@ public class Renderer implements GLEventListener {
 	private GLCanvas canvas;
 	private InputController ic;
     private TrackingCamera camera;
-	private GL2 gl;
 
 	public float spotlightPosition[] = {6.0f, 1.0f, 6.0f, 1};
 	
@@ -34,15 +36,17 @@ public class Renderer implements GLEventListener {
 
 	// World Objects
 	Player player;
-
-    // Test objects
-    ObjObject testCube, plane;
 	Terrain terrain;
 	SkyBox skyBox;
 	Target target;
-	DimensionTool dTool;
-	IndexedObject tree;
 
+	// Debug Objects
+	DimensionTool dTool;
+
+	/**
+	 * Constructor for renderer
+	 * @param canvas
+	 */
     public Renderer(GLCanvas canvas) {
 		this.canvas = canvas;
 		this.sceneEntityList = new ArrayList<Entity>();
@@ -161,8 +165,6 @@ public class Renderer implements GLEventListener {
 		this.lights(gl);
 		
 		sceneEntityList.add(dTool = new DimensionTool(gl));
-		sceneEntityList.add(testCube = new ObjObject("resources\\", "colorcube.obj", gl));
-		testCube.pos.y = 0.5;
 		skyBox = new SkyBox("resources\\SkyBox\\", "SkyBox.obj", Settings.gl);
 		skyBox.animated = true;
 		
@@ -170,15 +172,19 @@ public class Renderer implements GLEventListener {
 		sceneEntityList.add(terrain = new Terrain(200, 10.0, new ColorRGBA(61.0, 118.0, 40.0, 1.0), player));
 		skyBox.player = player;
 		skyBox.enable();
-		
-		sceneEntityList.add(tree = new IndexedObject(new ObjObject("resources\\", "tree.obj", Settings.gl).triDisplayList));
-		tree.pos.x = 1;
-		tree.pos.z = 1;
 
 		sceneEntityList.add(target = new Target("resources\\Target\\", "target.obj", Settings.gl, player, terrain));
 		enableScene();
+
+		// Use Texture Mip-Mapping
+		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_LINEAR);
+		gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_LINEAR_MIPMAP_LINEAR);
+		gl.glGenerateMipmap(GL2.GL_TEXTURE_2D);
 	}
 	
+	/**
+	 * Enables all object in the scene list
+	 */
 	private void enableScene() {
 		
 		double waitTime = 5.0 + (System.currentTimeMillis() / 1000.0);
@@ -198,39 +204,18 @@ public class Renderer implements GLEventListener {
 	private void lights(GL2 gl) {
 		//normalise the surface normals for lighting calculations
 		gl.glEnable(GL2.GL_NORMALIZE);
-		// lighting stuff
-		float ambient[] = { 0.3f, 0.3f, 0.3f, 1 };
-		float diffuse[] = { 1f, 1f, 1f, 1 };
-		float specular[] = { 1, 1, 1, 1 };
 		
-		
-		float[] ambientLight = { 0.1f, 0.1f, 0.1f, 1f };  // weak RED (this is really a white light?) ambient 
-		gl.glLightfv(GL2.GL_LIGHT3, GL2.GL_AMBIENT, ambientLight, 0); 
-		
-		float position0[] = { 5, 5, 5, 0 };
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, position0, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, diffuse, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, specular, 0);
-		
-		float position1[] = { -10, -10, -10, 0 };
-		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_POSITION, position1, 0);
-		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, ambient, 0);
-		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, diffuse, 0);
-		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, specular, 0);
+		float[] ambientLight = { 0.1f, 0.1f, 0.1f, 1f };  // dark gray ambient light
+		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, ambientLight, 0); 
 
-		float spotLightDirection[] = {5,0 ,0};
 		float spotLightAmbient[] = {1.0f, 0f, 0f, 1 };
-		float zeroPosition[] = {0,0,0,1};
 		gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_AMBIENT, spotLightAmbient, 0);
-		//gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_POSITION, zeroPosition, 0);
 		gl.glLightf(GL2.GL_LIGHT2, GL2.GL_SPOT_CUTOFF, 30.0f);
-		//gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_SPOT_DIRECTION, spotLightDirection, 0);
 		gl.glLightf(GL2.GL_LIGHT2, GL2.GL_SPOT_EXPONENT, 60.0f);
 
 		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT1);
 		gl.glEnable(GL2.GL_LIGHT2);
-		gl.glEnable(GL2.GL_LIGHT3);
 
 		gl.glEnable(GL2.GL_COLOR_MATERIAL);
 	}

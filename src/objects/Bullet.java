@@ -4,6 +4,10 @@ import com.jogamp.opengl.GL2;
 
 import renderer.Settings;
 
+/**
+ * Class for a bullet object
+ * @author Jordan Carter - 1317225
+ */
 public class Bullet extends IndexedObject {
 
     private float speed;
@@ -14,6 +18,11 @@ public class Bullet extends IndexedObject {
     public static Player player;
     public double endLifeTime = 0.0;
 
+    /**
+     * Constructor for a bullet object
+     * @param modelIndexValue
+     * @param speed
+     */
     public Bullet(int modelIndexValue, float speed) {
         super(modelIndexValue);
         this.speed = speed;
@@ -21,6 +30,9 @@ public class Bullet extends IndexedObject {
         this.endLifeTime = lifeTime + (System.currentTimeMillis() / 1000);
     }
 
+    /**
+     * Moves a bullet forward
+     */
     public void move() {
         double verticalDistance = speed * Math.sin(Math.toRadians(rotation.z));
         double horizontalDistance = speed * Math.cos(Math.toRadians(rotation.z));
@@ -31,6 +43,9 @@ public class Bullet extends IndexedObject {
         pos.y += verticalDistance * Settings.deltaTime;
     }
 
+    /**
+     * Checks collisions for the bullet
+     */
     public void checkCollisions() {
         boolean collided = false;
 
@@ -42,6 +57,10 @@ public class Bullet extends IndexedObject {
         }
     }
 
+    /**
+     * Checks the bullets lifetime
+     * If the bullet is too old, it will queue itself to be removed
+     */
     public void checkLifeTime() {
         if (System.currentTimeMillis() / 1000 > endLifeTime) {
             // Bullet has reached end of life, delete it
@@ -49,6 +68,9 @@ public class Bullet extends IndexedObject {
         }
     }
 
+    /**
+     * Queues the bullet to be removed
+     */
     private void removeBullet() {
         player.removeBullet(this);
     }
@@ -71,7 +93,6 @@ public class Bullet extends IndexedObject {
 		}
 
 		gl.glTranslated(pos.x, pos.y, pos.z); // translate the object from 0,0,0
-		//gl.glRotated(rot.r, rot.x, rot.y, rot.z); // rotate the object around the centre of its translated position (non pivot rotate)
         gl.glRotated(rotation.x, 1, 0, 0);
         gl.glRotated(rotation.y, 0, 1, 0);
         gl.glRotated(rotation.z, 0, 0, 1);

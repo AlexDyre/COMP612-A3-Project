@@ -17,6 +17,13 @@ import util.ColorRGB;
  */
 public class ObjMtlLoader {
 
+	/**
+	 * Parses a materials for the library
+	 * @param name
+	 * @param material
+	 * @param library
+	 * @return
+	 */
 	public static ObjMtl parseMaterial(String name, String material, MtlLibrary library) {
 		BufferedReader br = null;
 
@@ -54,7 +61,6 @@ public class ObjMtlLoader {
 							mat.illuminationModel = Integer.parseInt(tokens[1]);
 							break;
 						case "map_Kd":
-							//parseTexture(mat, tokens[1], library);
 							mat.map_Kd = tokens[1];
 							break;
 						default:
@@ -76,7 +82,6 @@ public class ObjMtlLoader {
 			}
 		}
 
-		//System.out.println(mat.mtlName + " " + mat.map_Kd);
 		if (mat.map_Kd != "") {
 			mat.textured = true;
 		}
@@ -84,11 +89,11 @@ public class ObjMtlLoader {
 		return mat;
 	}
 
-	private static void parseTexture(ObjMtl mat, String textureName, MtlLibrary library) {
-		ObjTexture texture = new ObjTexture();
-		texture.name = textureName;
-	}
-
+	/**
+	 * Parses a materials RGB
+	 * @param tokens
+	 * @return
+	 */
 	private static ColorRGB parseMtlRGBComponent(String[] tokens) {
 		ColorRGB rgb = new ColorRGB();
 
@@ -99,6 +104,12 @@ public class ObjMtlLoader {
 		return rgb;
 	}
 
+	/**
+	 * Parses a material library from file
+	 * @param path
+	 * @param file
+	 * @return
+	 */
 	public static MtlLibrary parseMtlLib(String path, String file) {
 		FileInputStream fs = null;
 		DataInputStream in = null;
@@ -165,10 +176,5 @@ public class ObjMtlLoader {
 		}
 
 		return library;
-	}
-
-	@Override
-	public String toString() {
-		return "ObjMtlLoader []";
 	}
 }

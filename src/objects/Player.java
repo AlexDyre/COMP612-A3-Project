@@ -11,10 +11,10 @@ import util.obj.ObjObject;
 
 /**
  * Player class acts as a parent object for all player components to attach to
+ * @author Jordan Carter - 1317225
  */
 public class Player extends Entity {
 
-    //public SkyBox skyBox;
     public ObjObject plane;
     public ObjObject planeProp;
     public TrackingCamera cam;
@@ -36,6 +36,10 @@ public class Player extends Entity {
     private double planeSpeed = 60;
     private double playAreaSize = 100;
 
+    /**
+     * Constructor for Player object
+     * @param cam
+     */
     public Player(TrackingCamera cam) {
         super();
         this.rotation.y = 0.0;
@@ -47,7 +51,7 @@ public class Player extends Entity {
         // Create and assign the skybox as a child object to the player
         pos = new Vector3(10,5,5);
         this.addChild(this.plane = new ObjObject("resources\\", "sc.obj", Settings.gl));
-        this.addChild(this.planeProp = new ObjObject("resources\\", "sc_prop.obj", Settings.gl));
+        plane.addChild(this.planeProp = new ObjObject("resources\\", "sc_prop.obj", Settings.gl));
         // plane prop height on plane = 1.49468m (distance unit from 3D model)
         this.planeProp.pos.y = 1.49468;
         
