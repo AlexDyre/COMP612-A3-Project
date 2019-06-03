@@ -35,7 +35,8 @@ public class Player extends Entity {
     private Vector3 cameraOffset = new Vector3(0, 6, 12);
     //private Vector3 cameraOffsetFirstPerson = new Vector3(0, 2, 2 );
 
-    private double planeSpeed = 60;
+    //private double planeSpeed = 60;
+    private double planeSpeed = 0;
     private double playAreaSize = 100;
 
     public Player(TrackingCamera cam) {
@@ -64,8 +65,7 @@ public class Player extends Entity {
         this.cam.cameraOffset = cameraOffset;
         this.cam.pos = new Vector3(0,10,10);
          // Load the bullet modelIndex
-        // TODO: use a propper model, not just a plane propeller....
-        this.bulletIndex = new ObjObject("resources\\", "colorcube.obj", Settings.gl).triDisplayList;
+        this.bulletIndex = new ObjObject("resources\\", "bullet.obj", Settings.gl).triDisplayList;
         Bullet.player = this;
     }
 
@@ -155,7 +155,6 @@ public class Player extends Entity {
     }
 
     public void drawBullets(GL2 gl) {
-        
         clearOldBullets();
 
         for (Bullet b : bullets) {
@@ -167,10 +166,11 @@ public class Player extends Entity {
         // create a bullet
         Bullet bullet = new Bullet(bulletIndex, bulletSpeed);
         bullet.pos = new Vector3(this.pos);
+        // Bullet height from gun 2.01465m
+        bullet.pos.y += 2.01465;
         bullet.rotation = new Vector3(rotation);
         bullet.enable();
         bullets.add(bullet);
-        
     }
 
     public void removeBullet(Bullet b) {

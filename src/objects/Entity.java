@@ -65,7 +65,6 @@ public abstract class Entity {
 		
 		// If the object is flagged as animated, animate the object
 		if (animated) {
-			// TODO: this
 			animate(gl, Settings.deltaTime * Settings.speedModifier);
 		}
 

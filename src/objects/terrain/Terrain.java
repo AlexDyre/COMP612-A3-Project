@@ -78,7 +78,6 @@ public class Terrain extends Entity {
         gl.glNewList(displayList, GL2.GL_COMPILE);
             terrainColor.set();
             for (TerrainFace face : terrain) {
-                
                 gl.glBegin(GL2.GL_TRIANGLE_STRIP);
                     gl.glNormal3d(0, 1, 0);
                     gl.glVertex3d(face.v1.x, face.v1.y, face.v1.z);

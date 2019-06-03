@@ -23,7 +23,7 @@ public class TexturedObjObject extends ObjObject {
     public TexturedObjObject(String path, String fileName, GL2 gl) {
         super();
         this.path = path;
-        this.filename = fileName;
+        this.modelFilename = fileName;
         this.textures = new ArrayList<Texture>();
         ObjLoader.importModel(path, fileName, this);
         // load textures
@@ -41,7 +41,6 @@ public class TexturedObjObject extends ObjObject {
         for (ObjMtl mat : mtlLibrary.materials) {
             if (mat.textured) {
                 try {
-                    //System.out.println("ASDSADASD");
                     textures.add(TextureIO.newTexture(new File(path + mat.map_Kd), true));
                     //textures.get(0).toString();
                 } catch (IOException e) {

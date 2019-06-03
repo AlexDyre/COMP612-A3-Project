@@ -14,10 +14,12 @@ import objects.Entity;
 import objects.IndexedObject;
 import objects.Player;
 import objects.SkyBox;
+import objects.Target;
 import objects.terrain.Terrain;
 import util.ColorRGBA;
 import util.Vector3;
 import util.obj.ObjObject;
+import util.obj.TexturedObjObject;
 
 public class Renderer implements GLEventListener {
 
@@ -38,6 +40,7 @@ public class Renderer implements GLEventListener {
     ObjObject testCube, plane;
 	Terrain terrain;
 	SkyBox skyBox;
+	Target target;
 	DimensionTool dTool;
 	IndexedObject tree;
 
@@ -102,17 +105,15 @@ public class Renderer implements GLEventListener {
 		lights(gl);
 		// Camera
 		camera.draw(gl);
+
 		gl.glDisable(GL2.GL_DEPTH_TEST);
 		skyBox.draw(gl);
 		gl.glEnable(GL2.GL_DEPTH_TEST);
-		// Draw the player, and all player objects
 		
-		testCube.draw(gl);
-		//plane.draw(gl);
-		tree.draw(gl);
-
         //terrain
 		terrain.draw(gl);
+
+		target.draw(gl);
 
 		player.draw(gl);
 		player.drawBullets(gl);
@@ -184,6 +185,8 @@ public class Renderer implements GLEventListener {
 		sceneEntityList.add(tree = new IndexedObject(new ObjObject("resources\\", "tree.obj", Settings.gl).triDisplayList));
 		tree.pos.x = 1;
 		tree.pos.z = 1;
+
+		sceneEntityList.add(target = new Target("resources\\Target\\", "target.obj", Settings.gl, player, terrain));
 		enableScene();
 	}
 	
@@ -223,16 +226,18 @@ public class Renderer implements GLEventListener {
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_AMBIENT, ambient, 0);
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_DIFFUSE, diffuse, 0);
 		gl.glLightfv(GL2.GL_LIGHT1, GL2.GL_SPECULAR, specular, 0);
-		
+
 		gl.glEnable(GL2.GL_LIGHTING);
 		gl.glEnable(GL2.GL_LIGHT0);
 		gl.glEnable(GL2.GL_LIGHT1);
-	
+		//gl.glEnable(GL2.GL_LIGHT2);
+		//gl.glEnable(GL2.GL_LIGHT3);
+
 		//lets use use standard color functions
 		gl.glEnable(GL2.GL_COLOR_MATERIAL);
+		//gl.glColorMaterial(GL2.GL_FRONT, GL2.GL_DIFFUSE);
 		//normalise the surface normals for lighting calculations
 		gl.glEnable(GL2.GL_NORMALIZE);
-		
 	}
 
     @Override

@@ -1,5 +1,7 @@
 package util;
 
+import com.jogamp.opengl.GL2;
+
 import renderer.Settings;
 
 /**
@@ -38,6 +40,9 @@ public class ColorRGBA {
 	 */
 	public void set() {
 		Settings.gl.glColor4d(red, green, blue, alpha);
+		//float[] color = {(float) red, (float) green, (float) blue, (float) alpha};
+		//System.out.println("Color G is: " + green);
+		//Settings.gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_DIFFUSE, color, 0);
 	}
 	
 	@Override

@@ -22,7 +22,7 @@ public class ObjObject extends Entity {
 	public ArrayList<Tri> transparentFaces;
 	public MtlLibrary mtlLibrary;
 	
-	public String path, filename;
+	public String path, modelFilename;
 	public int triDisplayList;
 
 	/**
@@ -30,7 +30,7 @@ public class ObjObject extends Entity {
 	 */
 	public ObjObject() {
 		super();
-		this.filename = "";
+		this.modelFilename = "";
 		this.path = "";
 		this.vertices = new ArrayList<Vector3>();
 		this.normals = new ArrayList<Vector3>();
@@ -46,7 +46,7 @@ public class ObjObject extends Entity {
 	 */
 	public ObjObject(String path, String fileName, GL2 gl) {
 		this();
-		this.filename = fileName;
+		this.modelFilename = fileName;
 		this.path = path;
 		ObjLoader.importModel(path, fileName, this);
 		// TODO: Re-reference
@@ -104,7 +104,7 @@ public class ObjObject extends Entity {
 	
 	@Override
 	public String toString() {
-		return "File: " + filename + " Vertices: " + vertices.size() + " Triangles: " + faces.size() + " Normals: " + normals.size() + " Materials: " + mtlLibrary + " Position: " + pos;
+		return "File: " + modelFilename + " Vertices: " + vertices.size() + " Triangles: " + faces.size() + " Normals: " + normals.size() + " Materials: " + mtlLibrary + " Position: " + pos;
 	}
 
 	@Override
