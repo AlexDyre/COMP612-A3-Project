@@ -5,7 +5,7 @@ import com.jogamp.opengl.GL2;
 public class Settings {
 
 	// Debug flag
-	public static boolean DEBUG = false;
+	public static boolean DEBUG = true;
 	
 	// View Settings
 	// 1.0 GL units = 1.0m

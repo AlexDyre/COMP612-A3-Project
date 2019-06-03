@@ -5,13 +5,16 @@ import com.jogamp.opengl.GL2;
 import util.Vector3;
 import util.obj.TexturedObjObject;
 
+/**
+ * Class for a Skybox object
+ */
 public class SkyBox extends TexturedObjObject {
 
     public Player player;
     /**
-     * 
-     * @param path
-     * @param fileName
+     * Constructor for a skybox object
+     * @param path Path to the folder containing the skybox model
+     * @param fileName name of the 3D skybox model
      * @param gl
      */
     public SkyBox(String path, String fileName, GL2 gl) {

@@ -33,9 +33,6 @@ public class Player extends Entity {
     private boolean aboveArea = false;
 
     private Vector3 cameraOffset = new Vector3(0, 6, 12);
-    //private Vector3 cameraOffsetFirstPerson = new Vector3(0, 2, 2 );
-
-    //private double planeSpeed = 60;
     private double planeSpeed = 60;
     private double playAreaSize = 100;
 
@@ -46,11 +43,9 @@ public class Player extends Entity {
         this.cam.player = this;
         this.bullets = new ArrayList<Bullet>();
         this.oldBullets = new ArrayList<Bullet>();
-       
         
         // Create and assign the skybox as a child object to the player
         pos = new Vector3(10,5,5);
-        //this.addChild(this.skyBox = new SkyBox("resources\\SkyBox\\", "SkyBox.obj", Settings.gl));
         this.addChild(this.plane = new ObjObject("resources\\", "sc.obj", Settings.gl));
         this.addChild(this.planeProp = new ObjObject("resources\\", "sc_prop.obj", Settings.gl));
         // plane prop height on plane = 1.49468m (distance unit from 3D model)
@@ -58,7 +53,9 @@ public class Player extends Entity {
         
 
         // Attach an axis tool for debugging
-        this.addChild(new DimensionTool(Settings.gl));
+        if (Settings.DEBUG) {
+            this.addChild(new DimensionTool(Settings.gl));
+        }
 
         animated = true;
         this.planeSpeed /= 3.6; // Convert the speed of the plane from km/h to m/s
@@ -69,6 +66,9 @@ public class Player extends Entity {
         Bullet.player = this;
     }
 
+    /**
+     * Checks if they player is in the bounds of the play area
+     */
     private void checkBounds() {
         if (pos.x > playAreaSize || pos.x < -playAreaSize || pos.z > playAreaSize || pos.z < -playAreaSize) {
             outside = true;
@@ -120,7 +120,6 @@ public class Player extends Entity {
 		}
 
 		gl.glTranslated(pos.x, pos.y, pos.z); // translate the object from 0,0,0
-		//gl.glRotated(rot.r, rot.x, rot.y, rot.z); // rotate the object around the centre of its translated position (non pivot rotate)
         gl.glRotated(rotation.x, 1, 0, 0);
         gl.glRotated(rotation.y, 0, 1, 0);
         gl.glRotated(rotation.z, 0, 0, 1);
@@ -146,6 +145,9 @@ public class Player extends Entity {
         pos.y += verticalDistance * Settings.deltaTime;
     }
 
+    /**
+     * Clears the bullets list of any old bullets
+     */
     public void clearOldBullets() {
         for (Bullet b : oldBullets) {
             bullets.remove(b);
@@ -154,6 +156,10 @@ public class Player extends Entity {
         oldBullets.clear();
     }
 
+    /**
+     * Renders the bullets
+     * @param gl
+     */
     public void drawBullets(GL2 gl) {
         clearOldBullets();
 
@@ -162,6 +168,9 @@ public class Player extends Entity {
         }
     }
     
+    /**
+     * Fires the weapon, creating a new bullet
+     */
     public void fireGun() {
         // create a bullet
         Bullet bullet = new Bullet(bulletIndex, bulletSpeed);
@@ -173,6 +182,10 @@ public class Player extends Entity {
         bullets.add(bullet);
     }
 
+    /**
+     * Adds a bullet to the old bullets list, queueing itself up for deletion
+     * @param b
+     */
     public void removeBullet(Bullet b) {
         oldBullets.add(b);
     }

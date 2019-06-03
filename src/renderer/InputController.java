@@ -2,7 +2,6 @@ package renderer;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 import com.jogamp.opengl.awt.GLCanvas;
 
@@ -13,8 +12,6 @@ import com.jogamp.opengl.awt.GLCanvas;
 public class InputController implements KeyListener {
 
     private Renderer renderer;
-
-    private ArrayList<Integer> keys;
 
     private double inputSensitivity = 2;
 
@@ -31,7 +28,6 @@ public class InputController implements KeyListener {
      */
     public InputController (GLCanvas canvas, Renderer renderer) {
         this.renderer = renderer;
-        this.keys = new ArrayList<Integer>();
         canvas.addKeyListener(this);
         printControls();
     }
@@ -41,10 +37,15 @@ public class InputController implements KeyListener {
      */
     public void printControls() {
         System.out.println("Key mapping:\n--------------------------------------------");
-        System.out.println("Space: Pause");
+        System.out.println("Space: Fire Gun");
+        System.out.println("W: Pitch Plane Down");
+        System.out.println("S: Pitch Plane Up");
+        System.out.println("A: Turn Plane Left");
+        System.out.println("D: Turn Plane Right");
         System.out.println("1: Slow Speed");
         System.out.println("2: Normal Speed");
         System.out.println("3: Fast Speed");
+        System.out.println("4: Very Fast Speed");
         System.out.println("~: Toggle Wireframe");
     }
 
@@ -85,16 +86,21 @@ public class InputController implements KeyListener {
             renderer.toggleWireframe();
         }
 
-        /*
-        if (key == KeyEvent.) {
-            
+        if (key == KeyEvent.VK_1) {
+            Settings.speedModifier = Settings.Speed.SLOW.speed;
         }
 
-        if (key == KeyEvent.) {
-            
+        if (key == KeyEvent.VK_2) {
+            Settings.speedModifier = Settings.Speed.NORMAL.speed;
         }
-		*/
-		
+
+        if (key == KeyEvent.VK_3) {
+            Settings.speedModifier = Settings.Speed.FAST.speed;
+        }
+
+        if (key == KeyEvent.VK_4) {
+            Settings.speedModifier = Settings.Speed.VFAST.speed;
+        }
     }
 
     @Override

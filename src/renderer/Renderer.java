@@ -7,7 +7,6 @@ import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.glu.GLU;
-import com.jogamp.opengl.util.gl2.GLUT;
 
 import objects.DimensionTool;
 import objects.Entity;
@@ -17,9 +16,7 @@ import objects.SkyBox;
 import objects.Target;
 import objects.terrain.Terrain;
 import util.ColorRGBA;
-import util.Vector3;
 import util.obj.ObjObject;
-import util.obj.TexturedObjObject;
 
 public class Renderer implements GLEventListener {
 
@@ -63,7 +60,7 @@ public class Renderer implements GLEventListener {
 		}
 
 		double _tick = System.currentTimeMillis() / 1000.0;
-		Settings.deltaTime = _tick - Settings.prevTick;
+		Settings.deltaTime = (_tick - Settings.prevTick) * Settings.speedModifier;
 		Settings.prevTick = _tick;
 	}
 
@@ -109,39 +106,27 @@ public class Renderer implements GLEventListener {
 		// Lights
 		target.updateLightPosition();
 
-		gl.glDisable(GL2.GL_DEPTH_TEST);
-			skyBox.draw(gl);
-		gl.glEnable(GL2.GL_DEPTH_TEST);
-		
-        //terrain
+		skyBox.draw(gl);
 		terrain.draw(gl);
-
 		target.draw(gl);
-
 		player.draw(gl);
 		player.drawBullets(gl);
-
 		
+		if (Settings.DEBUG) {
+			// Clear the depth buffer to render the axis/dimension tool ontop of everything else
+			gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
+			dTool.draw(gl);
+		}
 
-		// Clear the depth buffer to render the axis/dimension tool ontop of everything else
-		gl.glClear(GL2.GL_DEPTH_BUFFER_BIT);
-		//dTool.draw(gl);
-
-		
-
-		// Flush before ending frame\
+		// Flush before ending frame
         gl.glFlush();
     }
 
 	private void setupFog(GL2 gl) {
-		float fogColor[] = {0.9f, 0.9f, 0.9f, 1f};
+		float fogColor[] = {0.4f, 0.4f, 0.4f, 1f};
 		gl.glEnable(GL2.GL_FOG);
 		
 		gl.glFogfv(GL2.GL_FOG_COLOR, fogColor, 0);
-		//gl.glFogi(GL2.GL_FOG_MODE, GL2.GL_LINEAR);
-		//gl.glFogf(GL2.GL_FOG_START, 1.0f);
-		//gl.glFogf(GL2.GL_FOG_END, 10.0f);
-		//gl.glFogf(GL2.GL_FOG_MODE, GL2.GL_EXP);
 		gl.glFogi(GL2.GL_FOG_MODE, GL2.GL_EXP2);
 		gl.glFogf(GL2.GL_FOG_DENSITY, 0.01f);
 		gl.glFogf(GL2.GL_FOG_START, 250.0f);
@@ -158,7 +143,7 @@ public class Renderer implements GLEventListener {
         gl.setSwapInterval(1);
         
         // Setup the drawing area and shading
-		gl.glClearColor(0.9f, 0.9f, 0.9f, 1f);
+		gl.glClearColor(0.4f, 0.4f, 0.4f, 1f);
         gl.glShadeModel(GL2.GL_SMOOTH);
         
         // Enable depth testing
@@ -169,13 +154,11 @@ public class Renderer implements GLEventListener {
 
         // intialise the camera
 		this.camera = new TrackingCamera(canvas);
-		
-		// TODO: Fog should be re-enabled
+
 		setupFog(gl);
 
 		//use the lights
 		this.lights(gl);
-
 		
 		sceneEntityList.add(dTool = new DimensionTool(gl));
 		sceneEntityList.add(testCube = new ObjObject("resources\\", "colorcube.obj", gl));
@@ -238,30 +221,18 @@ public class Renderer implements GLEventListener {
 
 		float spotLightDirection[] = {5,0 ,0};
 		float spotLightAmbient[] = {1.0f, 0f, 0f, 1 };
-		float spotLightDiffuse[] = { 1f, 0f, 0f, 1 };
 		float zeroPosition[] = {0,0,0,1};
 		gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_AMBIENT, spotLightAmbient, 0);
-		
-		//gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_DIFFUSE, spotLightDiffuse, 0);
-		//gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_SPECULAR, specular, 0);
-		gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_POSITION, zeroPosition, 0);
-		gl.glLightf(GL2.GL_LIGHT2, GL2.GL_SPOT_CUTOFF, 90.0f);
-		gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_SPOT_DIRECTION, spotLightDirection, 0);
+		//gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_POSITION, zeroPosition, 0);
+		gl.glLightf(GL2.GL_LIGHT2, GL2.GL_SPOT_CUTOFF, 30.0f);
+		//gl.glLightfv(GL2.GL_LIGHT2, GL2.GL_SPOT_DIRECTION, spotLightDirection, 0);
 		gl.glLightf(GL2.GL_LIGHT2, GL2.GL_SPOT_EXPONENT, 60.0f);
-		//gl.glLightf(GL2.GL_LIGHT2, GL2.GL_CONSTANT_ATTENUATION, 1.0f);
-		//gl.glLightf(GL2.GL_LIGHT2, GL2.GL_LINEAR_ATTENUATION, 0.0f);
-		//gl.glLightf(GL2.GL_LIGHT2, GL2.GL_QUADRATIC_ATTENUATION, 0.0f);
 
 		gl.glEnable(GL2.GL_LIGHTING);
-		//gl.glEnable(GL2.GL_LIGHT0);
-		//gl.glEnable(GL2.GL_LIGHT1);
 		gl.glEnable(GL2.GL_LIGHT2);
 		gl.glEnable(GL2.GL_LIGHT3);
 
-		//lets use use standard color functions
 		gl.glEnable(GL2.GL_COLOR_MATERIAL);
-		//gl.glColorMaterial(GL2.GL_FRONT, GL2.GL_DIFFUSE);
-
 	}
 
     @Override
@@ -274,11 +245,8 @@ public class Renderer implements GLEventListener {
         final float h = (float) width / (float) height;
         Settings.windowHeight = height;
         Settings.windowWidth = width;
-        Main.settings.updateResolution();
-
-		// specify the affine transformation of x and y from normalized device
-		// coordinates to window coordinates
-
+		Main.settings.updateResolution();
+		
 		gl.glViewport(0, 0, width, height);
 
 		// switch to projection mode

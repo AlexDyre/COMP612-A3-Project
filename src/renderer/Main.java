@@ -4,12 +4,12 @@ import java.awt.Frame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
 
 /**
- * Main class for the 3D animated fish tank
+ * Main class for the COMP612 Final Project
+ * 1 GL unit = 1 Real World meter
  * @author Jordan Carter - 1317225
  */
 public class Main {
@@ -20,8 +20,6 @@ public class Main {
 		settings = new Settings();
 		Settings.deltaTime = 0.0;
 		Settings.speedModifier = 1.0;
-		//Settings.windowHeight = 400;
-		//Settings.windowWidth = 400;
 
 		if (Settings.DEBUG)
 			System.out.println("Initialising Project");
